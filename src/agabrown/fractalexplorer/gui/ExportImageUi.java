@@ -1,0 +1,212 @@
+// ExportImageUi.java
+
+package agabrown.fractalexplorer.gui;
+
+import java.awt.Container;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import agabrown.fractalexplorer.util.ExportFormat;
+import agabrown.fractalexplorer.util.FEConstants;
+
+/**
+ * Export the plot in the given BPWindow to a file in a user-chosen format (such as postscript,
+ * jpeg, pdf, svg etc). Fire up a GUI to take user input.
+ * 
+ * <pre>
+ * Code cribbed from agabplot project.
+ * </pre>
+ * 
+ * @author Anthony Brown Jul 2012
+ * 
+ */
+public class ExportImageUi extends JFrame implements ActionListener {
+
+  /** required for any serializable class */
+  public static final long serialVersionUID = 323157L;
+
+  /** FractalExplorerGui which 'owns' the ExportImageUi instance */
+  private final FractalExplorerGui explorer;
+
+  /** Directory in which the file of the exported plot is to be stored */
+  private String targetDir;
+
+  /** Text field in GUI containing filename */
+  private final JTextField whichFile;
+
+  /** Name of output file */
+  private String outFileName;
+
+  /** Contains command string for combo box with file type list */
+  private final String comboBoxActionCommand;
+
+  /**
+   * stores the ExportFormat enum to be used for the exported image.
+   */
+  private ExportFormat theFileType;
+
+  /**
+   * Reference to the JComboBox used for selecting export file formats.
+   */
+  private final JComboBox<ExportFormat> fileFormatBox;
+
+  /**
+   * Defines the action commands associated with this GUI element.
+   */
+  private enum ActionCommands {
+    SAVE("Click this button to save the image to file.", "Save"),
+    CANCEL("Click this button to cancel the image export.", "Cancel"),
+    BROWSE("Click this button to browse the directory tree for a different destination folder", "Browse"), ;
+
+    /**
+     * Tooltip for this command.
+     */
+    private String tooltip;
+
+    /**
+     * Short string for use in setting action commands.
+     */
+    private String command;
+
+    /**
+     * Constructor.
+     * 
+     * @param tip
+     *          Tooltip for this command.
+     * @param command
+     *          Short string for use in setting action commands.
+     */
+    private ActionCommands(final String tip, final String command) {
+      tooltip = tip;
+      this.command = command;
+    }
+  }
+
+  /**
+   * Create the GUI and show it to the user.
+   * 
+   * @param feGui
+   *          Fractal Explorer GUI which is the parent of the export-image GUI.
+   */
+  protected ExportImageUi(final FractalExplorerGui feGui) {
+
+    super("Export image to file");
+
+    explorer = feGui;
+
+    final JPanel buttonsPanel = createButtonsPanel();
+
+    targetDir = System.getProperty("user.dir");
+    final String initFileName = targetDir + "/" + FEConstants.PROJECT_NAME + "-image." + ExportFormat.PNG.extension();
+
+    final Box fileSelect = new Box(BoxLayout.Y_AXIS);
+    fileSelect.setBorder(BorderFactory.createTitledBorder("Image file name"));
+    whichFile = new JTextField(initFileName, 40);
+    fileSelect.add(whichFile);
+
+    fileFormatBox = new JComboBox<ExportFormat>(ExportFormat.values());
+    fileFormatBox.setSelectedItem(ExportFormat.PNG);
+    theFileType = (ExportFormat) fileFormatBox.getSelectedItem();
+    fileFormatBox.addActionListener(this);
+    fileFormatBox.setToolTipText("Select the file format here");
+
+    comboBoxActionCommand = fileFormatBox.getActionCommand();
+
+    final Container container = getContentPane();
+    container.setLayout(new GridBagLayout());
+    final GridBagConstraints constraints = new GridBagConstraints();
+
+    constraints.fill = GridBagConstraints.NONE;
+    constraints.gridy = 0;
+    container.add(fileSelect, constraints);
+    constraints.gridy = 1;
+    container.add(fileFormatBox, constraints);
+    constraints.gridy = 2;
+    container.add(buttonsPanel, constraints);
+
+    pack();
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    setVisible(true);
+
+  }
+
+  /**
+   * Create the JPanel with the clickable buttons for the image export GUI.
+   * 
+   * @return A JPanel instance with the buttons defined.
+   */
+  protected JPanel createButtonsPanel() {
+    final JPanel buttonsPanel = new JPanel();
+    final JButton saveButton = new JButton(ActionCommands.SAVE.command);
+    saveButton.addActionListener(this);
+    saveButton.setActionCommand(ActionCommands.SAVE.command);
+    saveButton.setToolTipText(ActionCommands.SAVE.tooltip);
+    final JButton cancelButton = new JButton(ActionCommands.CANCEL.command);
+    cancelButton.addActionListener(this);
+    cancelButton.setActionCommand(ActionCommands.CANCEL.command);
+    cancelButton.setToolTipText(ActionCommands.CANCEL.tooltip);
+    final JButton browseButton = new JButton(ActionCommands.BROWSE.command);
+    browseButton.addActionListener(this);
+    browseButton.setActionCommand(ActionCommands.BROWSE.command);
+    browseButton.setToolTipText(ActionCommands.BROWSE.tooltip);
+    buttonsPanel.add(saveButton);
+    buttonsPanel.add(cancelButton);
+    buttonsPanel.add(browseButton);
+    return buttonsPanel;
+  }
+
+  /**
+   * Handle received ActionEvents
+   * 
+   * @param actionEvent
+   *          ActionEvent object
+   */
+  public void actionPerformed(final ActionEvent actionEvent) {
+
+    final String command = actionEvent.getActionCommand();
+
+    if (command.equals(ActionCommands.CANCEL.command)) {
+      dispose();
+    }
+
+    if (command.equals(ActionCommands.BROWSE.command)) {
+      final JFileChooser chooser = new JFileChooser(targetDir);
+      chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+      if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+        targetDir = chooser.getSelectedFile().getPath();
+        outFileName = targetDir + "/" + FEConstants.PROJECT_NAME + "-image." + theFileType.extension();
+        whichFile.setText(outFileName);
+      }
+    }
+
+    if (command.equals(comboBoxActionCommand)) {
+      theFileType = (ExportFormat) fileFormatBox.getSelectedItem();
+      outFileName = targetDir + "/" + FEConstants.PROJECT_NAME + "-image." + theFileType.extension();
+      whichFile.setText(outFileName);
+    }
+
+    if (command.equals(ActionCommands.SAVE.command)) {
+      outFileName = whichFile.getText();
+      try {
+        theFileType.export(explorer.getViewPanel(), outFileName, explorer.getWidth(), explorer.getHeight());
+      } catch (final Exception e) {
+        e.printStackTrace();
+      }
+      dispose();
+    }
+
+  }
+
+}

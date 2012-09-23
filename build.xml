@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="FractalExplorer" basedir="." default="dist">
+
+  <property name="project.author" value="Anthony Brown (2012--2012)" />
+  <property name="project.description" value="Package providing simple visual fractal set explorer" />
+  <property name="project.version" value="0.3.1" />
+
+  <!-- Folder shortcuts /-->
+  <property name="basedir" value="." />
+  <property name="home" value="/home/brown" />
+  <property name="jde" value="${home}/JDE" />
+  <property name="src" value="${basedir}/src" />
+  <property name="classes" value="${basedir}/build" />
+  <property name="docs" value="${basedir}/docs" />
+  <property name="dist" value="${basedir}/dist" />
+  <property name="lib" value="${basedir}/lib" />
+  <property name="reports" value="${basedir}/buildreport" />
+  <property name="junit.reports" value="${reports}/junit"/>
+
+  <!-- 3rd party JAR files /-->
+  <property name="junit" value="junit-4.10.jar" />
+  <property name="iText" value="itextpdf-5.2.1.jar" />
+  <property name="iTextExtra" value="itext-xtra-5.2.1.jar" />
+
+  <!-- Build paths /-->
+  <path id="build.class.path">
+    <pathelement location="${lib}/${junit}" />
+    <pathelement location="${lib}/${iText}"/>
+    <pathelement location="${lib}/${iTextExtra}"/>
+  </path>
+
+  <path id="run.class.path">
+    <path refid="build.class.path"/>
+    <pathelement location="${dist}/${ant.project.name}.jar" />
+  </path>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <mkdir dir="${classes}" />
+    <mkdir dir="${dist}" />
+    <mkdir dir="${docs}" />
+  	<mkdir dir="${reports}"/>
+  	<mkdir dir="${junit.reports}"/>
+  </target>
+
+  <target name="clean" depends="" description="Delete all generated files">
+    <delete dir="${classes}" failonerror="false"/>
+    <delete dir="${dist}" failonerror="false"/>
+    <delete dir="${docs}" failonerror="false"/>
+    <delete dir="${reports}" failonerror="false" />
+  </target>
+
+  <target name="compile" depends="init" description="Compiles the fractalexplorer package">
+    <echo message="Compiling with Java ${java.version}" />
+    <javac destdir="${classes}" source="1.6" target="1.6" srcdir="${src}" classpathref="build.class.path" includeantruntime="false">
+      <compilerarg value="-Xlint" />
+    </javac>
+    <copy todir="${classes}/agabrown/fractalexplorer/gui/help-files">
+      <fileset dir="${basedir}/doc-files/help-files"/>
+    </copy>
+  </target>
+
+  <target name="dist" depends="compile" description="Builds the distribution jar file">
+    <jar destfile="${dist}/${ant.project.name}.jar">
+      <fileset dir="${classes}">
+        <exclude name="**/doc-files/**" />
+        <exclude name="**/test/**" />
+      </fileset>
+      <zipgroupfileset dir="${lib}" >
+        <include name="${htmIndex}"/>
+        <include name="${iText}"/>
+        <include name="${iTextExtra}"/>
+      </zipgroupfileset>
+      <manifest>
+        <attribute name="Class-Path" value=".:lib" />
+        <attribute name="Specification-Title" value="${project.description}"/>
+        <attribute name="Specification-Version" value="${project.version}" />
+        <attribute name="Specification-Vendor" value="${project.author}" />
+        <attribute name="Author" value="${project.author}" />
+        <attribute name="version" value="${project.version}" />
+        <attribute name="Built-By" value="Anthony Brown ${DSTAMP}"/>
+        <attribute name="Main-Class" value="agabrown.fractalexplorer.gui.FractalExplorerGui"/>
+      </manifest>
+    </jar>
+    <copy file="${dist}/${ant.project.name}.jar" tofile="${jde}/${ant.project.name}/${ant.project.name}.jar"/>
+  </target>
+
+  <target name="distTest" depends="compile" description="Builds the distribution jar file, including JUnit tests">
+    <jar destfile="${dist}/${ant.project.name}-test.jar">
+      <fileset dir="${classes}">
+        <exclude name="**/doc-files/**" />
+      </fileset>
+      <zipgroupfileset dir="${lib}" >
+        <include name="${htmIndex}"/>
+      	<include name="${iText}"/>
+        <include name="${iTextExtra}"/>
+      </zipgroupfileset>
+      <manifest>
+        <attribute name="Class-Path" value=".:lib" />
+        <attribute name="Specification-Title" value="${project.description}"/>
+        <attribute name="Specification-Version" value="${project.version}" />
+        <attribute name="Specification-Vendor" value="${project.author}" />
+        <attribute name="Author" value="${project.author}" />
+        <attribute name="version" value="${project.version}" />
+        <attribute name="Built-By" value="Anthony Brown ${DSTAMP}"/>
+        <attribute name="Main-Class" value="agabrown.fractalexplorer.gui.FractalExplorerGui"/>
+      </manifest>
+    </jar>
+  </target>
+
+	<target name="docapi" depends="init" description="Produce documentation">
+    <mkdir dir="${docs}" />
+    <javadoc destdir="${docs}" author="true" version="true" access="private" classpathref="build.class.path">
+      <packageset dir="${src}" defaultexcludes="yes">
+        <include name="agabrown/fractalexplorer/**"/>
+        <exclude name="**/test/**" />
+      </packageset>
+    </javadoc>
+    <copy todir="${docs}/agabrown/fractalexplorer/doc-images">
+      <fileset dir="${basedir}/doc-files/doc-images"/>
+    </copy>
+  </target>
+
+  <target name="run" depends="dist" description="Use ant to run FractalExplorerGui">
+    <java classpath="${classpath}:${dist}/${ant.project.name}.jar"
+      classname="agabrown.${ant.project.name}.FractalExplorerGui" fork="true">
+    </java>
+  </target>
+
+  <!-- run the unit tests -->
+  <target name="test" depends="distTest">
+    <junit errorProperty="junit.failed" fork="yes" printsummary="yes">
+      <classpath>
+        <path refid="build.class.path"/>
+        <pathelement location="${dist}/${ant.project.name}-test.jar" />
+      </classpath>
+      <formatter type="xml" usefile="true" />
+      <batchtest todir="${junit.reports}">
+        <fileset dir="${classes}" includes="**/*Test.class" />
+      </batchtest>
+    </junit>
+    <!-- xml style report on testing so need an html report - make it with this -->
+    <junitreport todir="${junit.reports}">
+      <fileset dir="${junit.reports}">
+        <include
+          name="TEST-*.xml"/>
+      </fileset>
+      <report
+        format="frames"
+        todir="${junit.reports}/html"/>
+    </junitreport>
+    <fail
+      message="Test
+      Cases
+      Failed"
+      if="junit.failed"/>
+  </target>
+
+</project>
