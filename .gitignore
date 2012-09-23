@@ -9,6 +9,7 @@ lib/*.jar
 # folders generated on the fly #
 ################################
 
+.settings/
 build/
 docs/
 buildreport/
