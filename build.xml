@@ -56,9 +56,11 @@
     <javac destdir="${classes}" source="1.6" target="1.6" srcdir="${src}" classpathref="build.class.path" includeantruntime="false">
       <compilerarg value="-Xlint" />
     </javac>
+    <!--
     <copy todir="${classes}/agabrown/fractalexplorer/gui/help-files">
       <fileset dir="${basedir}/doc-files/help-files"/>
     </copy>
+    -->
   </target>
 
   <target name="dist" depends="compile" description="Builds the distribution jar file">
@@ -117,9 +119,11 @@
         <exclude name="**/test/**" />
       </packageset>
     </javadoc>
+    <!--
     <copy todir="${docs}/agabrown/fractalexplorer/doc-images">
       <fileset dir="${basedir}/doc-files/doc-images"/>
     </copy>
+    -->
   </target>
 
   <target name="run" depends="dist" description="Use ant to run FractalExplorerGui">
