@@ -2,9 +2,9 @@
 ###################
 *.class
 
-# lib folder contents #
-#######################
-lib/*.jar
+# jar files #
+#############
+*.jar
 
 # folders generated on the fly #
 ################################
