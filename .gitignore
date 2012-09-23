@@ -1,0 +1,15 @@
+# Compiled source #
+###################
+*.class
+
+# lib folder contents #
+#######################
+lib/*.jar
+
+# folders generated on the fly #
+################################
+
+build/
+docs/
+buildreport/
+dist/
