@@ -21,8 +21,10 @@ Requirements
 Make sure the following are in the "lib" folder:
 
 junit-4.10.jar
-itextpdf-5.2.1.jar
-itext-xtra-5.2.1.jar
+itextpdf-5.3.3.jar
+itext-xtra-5.3.3.jar
+
+Precise version of iText are not so important but don't forget then to adjust the build.xml file.
 
 Building the project
 --------------------

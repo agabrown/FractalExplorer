@@ -19,8 +19,8 @@
 
   <!-- 3rd party JAR files /-->
   <property name="junit" value="junit-4.10.jar" />
-  <property name="iText" value="itextpdf-5.2.1.jar" />
-  <property name="iTextExtra" value="itext-xtra-5.2.1.jar" />
+  <property name="iText" value="itextpdf-5.3.3.jar" />
+  <property name="iTextExtra" value="itext-xtra-5.3.3.jar" />
 
   <!-- Build paths /-->
   <path id="build.class.path">
