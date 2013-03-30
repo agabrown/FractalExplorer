@@ -6,12 +6,19 @@
  * 'escape time' algorithm. For background see this <a
  * href="http://en.wikipedia.org/wiki/Mandelbrot_set">wiki page</a>.
  * 
- * @version 0.3.1
- * @version 01.08.2012
+ * @version 0.3.2
+ * @version 30.03.2013
  * @author Anthony Brown
  * @author agabrown@xs4all.nl
  * 
  *         <h2>History</h2>
+ * 
+ *         <p>
+ *         <b>March 2013</b>
+ *         <ul>
+ *         <li>Updated dependencies and build file.</li>
+ *         </ul>
+ *         </p>
  * 
  *         <p>
  *         <b>August 2012, version 0.3.1</b>

@@ -1,7 +1,8 @@
 package agabrown.fractalexplorer.dm;
 
 /**
- * Provides the complex number data type and methods for operating on complex numbers.
+ * Provides the complex number data type and methods for operating on complex
+ * numbers.
  * 
  * @author agabrown 18 Jul 2012
  * 
@@ -24,11 +25,6 @@ public final class Complex {
   private final double nrm;
 
   /**
-   * Argument of complex number in polar representation.
-   */
-  private final double argument;
-
-  /**
    * The square of the norm of the complex number.
    */
   private final double nrmSquared;
@@ -43,7 +39,7 @@ public final class Complex {
     this.imaginary = y;
     nrmSquared = real * real + imaginary * imaginary;
     nrm = Math.sqrt(nrmSquared);
-    argument = Math.atan2(imaginary, real);
+    Math.atan2(imaginary, real);
   }
 
   /**
@@ -75,7 +71,8 @@ public final class Complex {
   }
 
   /**
-   * Return a new complex number which is the sum of this and the other complex number.
+   * Return a new complex number which is the sum of this and the other complex
+   * number.
    * 
    * other - Complex number to add to this number.
    */
@@ -84,7 +81,8 @@ public final class Complex {
   }
 
   /**
-   * Return a new complex number which is the difference of this and the other complex number.
+   * Return a new complex number which is the difference of this and the other
+   * complex number.
    * 
    * other - Complex number to subtract from this number.
    */
@@ -93,7 +91,8 @@ public final class Complex {
   }
 
   /**
-   * Return a new complex number which is the multiplication of this and the other complex number.
+   * Return a new complex number which is the multiplication of this and the
+   * other complex number.
    * 
    * other - Complex number to multiply with this number.
    */
@@ -103,7 +102,8 @@ public final class Complex {
   }
 
   /**
-   * Return a new complex number which the multiplication of this complex number with a real number.
+   * Return a new complex number which the multiplication of this complex number
+   * with a real number.
    * 
    * factor - Real number with which to multiply this complex number.
    */
@@ -112,8 +112,8 @@ public final class Complex {
   }
 
   /**
-   * Return a new complex number which the division of this complex number by another complex
-   * number.
+   * Return a new complex number which the division of this complex number by
+   * another complex number.
    * 
    * factor - Complex number by which to divide this complex number.
    */

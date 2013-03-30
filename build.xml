@@ -3,7 +3,7 @@
 
   <property name="project.author" value="Anthony Brown (2012--2012)" />
   <property name="project.description" value="Package providing simple visual fractal set explorer" />
-  <property name="project.version" value="0.3.1" />
+  <property name="project.version" value="0.3.2" />
 
   <!-- Folder shortcuts /-->
   <property name="basedir" value="." />
@@ -18,13 +18,15 @@
   <property name="junit.reports" value="${reports}/junit"/>
 
   <!-- 3rd party JAR files /-->
-  <property name="junit" value="junit-4.10.jar" />
-  <property name="iText" value="itextpdf-5.3.3.jar" />
-  <property name="iTextExtra" value="itext-xtra-5.3.3.jar" />
+  <property name="junit" value="junit-4.11.jar" />
+  <property name="hamcrest" value="hamcrest-core-1.3.jar" />
+  <property name="iText" value="itextpdf-5.4.0.jar" />
+  <property name="iTextExtra" value="itext-xtra-5.4.0.jar" />
 
   <!-- Build paths /-->
   <path id="build.class.path">
     <pathelement location="${lib}/${junit}" />
+    <pathelement location="${lib}/${hamcrest}" />
     <pathelement location="${lib}/${iText}"/>
     <pathelement location="${lib}/${iTextExtra}"/>
   </path>
@@ -70,7 +72,6 @@
         <exclude name="**/test/**" />
       </fileset>
       <zipgroupfileset dir="${lib}" >
-        <include name="${htmIndex}"/>
         <include name="${iText}"/>
         <include name="${iTextExtra}"/>
       </zipgroupfileset>
@@ -94,7 +95,6 @@
         <exclude name="**/doc-files/**" />
       </fileset>
       <zipgroupfileset dir="${lib}" >
-        <include name="${htmIndex}"/>
       	<include name="${iText}"/>
         <include name="${iTextExtra}"/>
       </zipgroupfileset>
