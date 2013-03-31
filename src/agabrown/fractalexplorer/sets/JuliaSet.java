@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Provides methods for evaluating whether or not a point belongs to the Julia
- * set. The polynomial f(z)=z<sup>2</sup>+&mu; is iterated with starting point
- * z<sub>0</sub>.
+ * Provides methods for evaluating whether or not a point z<sub>0</sub> belongs
+ * to the Julia set. The polynomial f(z)=z<sup>2</sup>+&mu; is iterated with
+ * starting point z<sub>0</sub>.
  * 
  * @author agabrown 26 Jul 2012
  * 
