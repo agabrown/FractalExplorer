@@ -1,6 +1,8 @@
 package agabrown.fractalexplorer.gui;
 
 import java.awt.Dimension;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -36,11 +38,6 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
   private static final long serialVersionUID = -5925852599513426751L;
 
   /**
-   * Scaling factor for determining the size of the image.
-   */
-  private static final int IMAGE_SCALE_FACTOR = 180;
-
-  /**
    * Default maximum on iterations in calculating whether a point is in the
    * fractal set or not.
    */
@@ -64,12 +61,12 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
   /**
    * Width of the image array (length along horizontal screen direction).
    */
-  private int imWidth;
+  private final int imWidth;
 
   /**
    * Height of the image array (length along vertical screen direction).
    */
-  private int imHeight;
+  private final int imHeight;
 
   /**
    * Maximum number of iterations for calculating whether a point is in the
@@ -135,16 +132,29 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
   private final InfoLayerUI infoLayerUI = new InfoLayerUI(this);
 
   /**
-   * Constructor.
+   * Constructor. Contains code to detect whether or not full screen mode is
+   * supported in the graphics environment from which FractalExplorer is
+   * invoked.
    */
   public FractalExplorerGui() {
     super("FractalExplorer");
     selectLookAndFeel();
     fractalSet = mandelbrotSet;
+    final GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    final GraphicsDevice device = env.getDefaultScreenDevice();
+    imWidth = device.getDefaultConfiguration().getBounds().width;
+    imHeight = device.getDefaultConfiguration().getBounds().height;
     initializeFields();
     addComponentsToFrame();
-    pack();
-    setSize(new Dimension(imWidth, imHeight));
+    final boolean isFullScreen = device.isFullScreenSupported();
+    setUndecorated(isFullScreen);
+    if (isFullScreen) {
+      device.setFullScreenWindow(this);
+      validate();
+    } else {
+      pack();
+      setSize(new Dimension(imWidth, imHeight));
+    }
     setResizable(false);
     setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -257,8 +267,6 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
    * Initialize the class fields.
    */
   private void initializeFields() {
-    imWidth = 6 * IMAGE_SCALE_FACTOR;
-    imHeight = 4 * IMAGE_SCALE_FACTOR;
     fractalImage = new double[imWidth * imHeight];
     maxIterations = DEFAULT_MAX_ITERATIONS;
     activeCpv = new ComplexPlaneView(imWidth, imHeight);

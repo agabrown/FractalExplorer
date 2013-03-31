@@ -6,15 +6,23 @@
  * 'escape time' algorithm. For background see this <a
  * href="http://en.wikipedia.org/wiki/Mandelbrot_set">wiki page</a>.
  * 
- * @version 0.3.2
- * @version 30.03.2013
+ * @version 0.4.0
+ * @version 31.03.2013
  * @author Anthony Brown
  * @author agabrown@xs4all.nl
  * 
  *         <h2>History</h2>
  * 
  *         <p>
- *         <b>March 2013</b>
+ *         <b>March 2013, version 0.4.0</b>
+ *         <ul>
+ *         <li>Full screen is used now either in "full screen mode" or by
+ *         instantiating a window that takes up the full screen.</li>
+ *         </ul>
+ *         </p>
+ * 
+ *         <p>
+ *         <b>March 2013, version 0.3.2</b>
  *         <ul>
  *         <li>Updated dependencies and build file.</li>
  *         </ul>
@@ -55,7 +63,7 @@
  *         <li>Small bug-fix in the
  *         {@link agabrown.fractalexplorer.colours.ImageScaling} enum, which did
  *         not take into account the possibility that an image consists of
- *         pixels all of the same values.</li>
+ *         pixels all at same value.</li>
  *         </ul>
  *         </p>
  * 

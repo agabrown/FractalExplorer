@@ -29,12 +29,12 @@ public final class FEConstants {
   /**
    * Author of this project
    */
-  public static final String YEARS = "2012";
+  public static final String YEARS = "2012" + "\u2013" + "2013";
 
   /**
    * Package version.
    */
-  public static final String VERSION = "0.3.2";
+  public static final String VERSION = "0.4.0";
 
   /**
    * The constant 1/2;
@@ -60,5 +60,10 @@ public final class FEConstants {
    * Default size of interval along imaginary axis of complex plane view.
    */
   public static final double DEFAULT_SIZE_IMAGINARY = 2.0;
+
+  /**
+   * Preferred aspect ratio dictated by default view of complex plane.
+   */
+  public static final double PREFERRED_ASPECT_RATIO = DEFAULT_SIZE_IMAGINARY / DEFAULT_SIZE_REAL;
 
 }

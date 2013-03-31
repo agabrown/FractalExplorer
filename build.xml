@@ -3,7 +3,7 @@
 
   <property name="project.author" value="Anthony Brown (2012--2012)" />
   <property name="project.description" value="Package providing simple visual fractal set explorer" />
-  <property name="project.version" value="0.3.2" />
+  <property name="project.version" value="0.4.0" />
 
   <!-- Folder shortcuts /-->
   <property name="basedir" value="." />

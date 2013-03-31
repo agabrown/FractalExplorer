@@ -49,6 +49,12 @@ public final class ComplexPlaneView {
   private final int sizeImaginaryPixels;
 
   /**
+   * If true recalculate the length of the imaginary axis of the complex plane
+   * view in order to get the correct aspect ratio on the image.
+   */
+  private final boolean resizeImaginary;
+
+  /**
    * Pixel size along real axis.
    */
   private double deltaRe;
@@ -80,6 +86,7 @@ public final class ComplexPlaneView {
   public ComplexPlaneView(final int sizeRePix, final int sizeImPix) {
     sizeRealPixels = sizeRePix;
     sizeImaginaryPixels = sizeImPix;
+    resizeImaginary = FEConstants.PREFERRED_ASPECT_RATIO > (double) sizeImPix / sizeRePix;
     initialize();
   }
 
@@ -89,8 +96,13 @@ public final class ComplexPlaneView {
   private void initialize() {
     centreReal = FEConstants.DEFAULT_CENTRE_REAL;
     centreImaginary = FEConstants.DEFAULT_CENTRE_IMAGINARY;
-    sizeImaginary = FEConstants.DEFAULT_SIZE_IMAGINARY;
-    sizeReal = FEConstants.DEFAULT_SIZE_REAL;
+    if (resizeImaginary) {
+      sizeReal = FEConstants.DEFAULT_SIZE_REAL;
+      sizeImaginary = sizeReal * sizeImaginaryPixels / sizeRealPixels;
+    } else {
+      sizeImaginary = FEConstants.DEFAULT_SIZE_IMAGINARY;
+      sizeReal = sizeImaginary * sizeRealPixels / sizeImaginaryPixels;
+    }
     zoomFactor = 1.0;
     reMin = centreReal - FEConstants.HALF * sizeReal;
     imMin = centreImaginary - FEConstants.HALF * sizeImaginary;
