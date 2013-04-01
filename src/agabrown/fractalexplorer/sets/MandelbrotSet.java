@@ -11,7 +11,7 @@ import java.util.List;
  * @author agabrown 18 Jul 2012
  * 
  */
-public class MandelbrotSet implements FractalSet {
+public final class MandelbrotSet implements FractalSet {
 
   /**
    * Upper limit on magnitude of the complex numbers that can belong to the

@@ -36,19 +36,19 @@ public final class JuliaSet implements FractalSet {
   private static final int MU_UNICODE = 0x03BC;
 
   /**
-   * Contains the constant parts of the info text lines.
+   * Contains the info text lines.
    */
-  private ArrayList<StringBuilder> infoLineParts;
+  private ArrayList<String> infoLines;
 
   /**
    * Real part of Julia set parameter &mu;.
    */
-  private double muReal;
+  private final double muReal;
 
   /**
    * Imaginary part of Julia set parameter &mu;.
    */
-  private double muImaginary;
+  private final double muImaginary;
 
   /**
    * Default constructor. Sets the &mu; parameter to 0+i*0.
@@ -69,54 +69,6 @@ public final class JuliaSet implements FractalSet {
     muReal = muRe;
     muImaginary = muIm;
     intializeInfoLines();
-  }
-
-  /**
-   * Initialize the constant parts of the lines with information on the Julia
-   * Set parameters.
-   */
-  private void intializeInfoLines() {
-    infoLineParts = new ArrayList<StringBuilder>();
-    StringBuilder line = new StringBuilder("Re(");
-    line.appendCodePoint(MU_UNICODE);
-    line.append(") = ");
-    infoLineParts.add(line);
-    line = new StringBuilder("Im(");
-    line.appendCodePoint(MU_UNICODE);
-    line.append(") = ");
-    infoLineParts.add(line);
-    infoLineParts.trimToSize();
-  }
-
-  /**
-   * Set the value of &mu;.
-   * 
-   * @param muRe
-   *          Real part of &mu;.
-   * @param muIm
-   *          Imaginary part of &mu;.
-   */
-  public void setMuParameter(final double muRe, final double muIm) {
-    muReal = muRe;
-    muImaginary = muIm;
-  }
-
-  /**
-   * Obtain the real part of &mu;.
-   * 
-   * @return Value of Re(&mu;).
-   */
-  public double getMuReal() {
-    return muReal;
-  }
-
-  /**
-   * Obtain the imaginary part of &mu;.
-   * 
-   * @return Value of Im(&mu;).
-   */
-  public double getMuImaginary() {
-    return muImaginary;
   }
 
   /*
@@ -153,15 +105,26 @@ public final class JuliaSet implements FractalSet {
 
   @Override
   public List<String> getInfoLines() {
-    final ArrayList<String> infoLines = new ArrayList<>();
-    StringBuilder line = new StringBuilder(infoLineParts.get(0));
+    return infoLines;
+  }
+
+  /**
+   * Initialize the constant parts of the lines with information on the Julia
+   * Set parameters.
+   */
+  private void intializeInfoLines() {
+    infoLines = new ArrayList<>();
+    StringBuilder line = new StringBuilder("Re(");
+    line.appendCodePoint(MU_UNICODE);
+    line.append(") = ");
     line.append(muReal);
     infoLines.add(line.toString());
-    line = new StringBuilder(infoLineParts.get(1));
+    line = new StringBuilder("Im(");
+    line.appendCodePoint(MU_UNICODE);
+    line.append(") = ");
     line.append(muImaginary);
     infoLines.add(line.toString());
     infoLines.trimToSize();
-    return infoLines;
   }
 
   /**

@@ -135,7 +135,7 @@ public class ComplexPlaneViewTest {
     assertEquals(-2.71, viewA.getCentreImaginary(), TOLERANCE);
     double expected = 3.14 - FEConstants.HALF * origSizeReal;
     assertEquals(expected, viewA.getValueAtRealPixel(0), TOLERANCE);
-    expected = -2.71 - FEConstants.HALF * origSizeImaginary;
+    expected = -2.71 + FEConstants.HALF * origSizeImaginary;
     assertEquals(expected, viewA.getValueAtImaginaryPixel(0), TOLERANCE);
   }
 
@@ -186,11 +186,11 @@ public class ComplexPlaneViewTest {
   @Test
   public void testGetValueAtImaginaryPixel() {
     final double origSizeImaginary = viewA.getSizeImaginary();
-    double expected = FEConstants.DEFAULT_CENTRE_IMAGINARY - FEConstants.HALF * origSizeImaginary;
+    double expected = FEConstants.DEFAULT_CENTRE_IMAGINARY + FEConstants.HALF * origSizeImaginary;
     assertEquals(expected, viewA.getValueAtImaginaryPixel(0), TOLERANCE);
-    expected = FEConstants.DEFAULT_CENTRE_IMAGINARY + FEConstants.HALF * origSizeImaginary;
+    expected = FEConstants.DEFAULT_CENTRE_IMAGINARY - FEConstants.HALF * origSizeImaginary;
     assertEquals(expected, viewA.getValueAtImaginaryPixel(sizeIm - 1), TOLERANCE);
-    expected = FEConstants.DEFAULT_CENTRE_IMAGINARY - FEConstants.HALF * origSizeImaginary + 37.0 / (sizeIm - 1)
+    expected = FEConstants.DEFAULT_CENTRE_IMAGINARY + FEConstants.HALF * origSizeImaginary - 37.0 / (sizeIm - 1)
         * origSizeImaginary;
     assertEquals(expected, viewA.getValueAtImaginaryPixel(37), TOLERANCE);
   }

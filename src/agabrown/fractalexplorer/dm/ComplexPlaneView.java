@@ -262,26 +262,28 @@ public final class ComplexPlaneView {
   }
 
   /**
-   * Obtain the imaginary coordinate at pixel j along the real axis.
+   * Obtain the imaginary coordinate at pixel j along the imaginary axis. Takes
+   * into account that the screen pixel indices run from top to bottom.
    * 
    * @param j
    *          Pixel position along imaginary axis.
    * @return Value of the coordinate along the imaginary axis.
    */
   public double getValueAtImaginaryPixel(final int j) {
-    return imMin + j * deltaIm;
+    return imMin + (sizeImaginaryPixels - j - 1) * deltaIm;
   }
 
   /**
    * Obtain the real coordinate at the continuous pixel coordinate y along the
-   * imaginary axis.
+   * imaginary axis. Takes into account that the screen pixel coordinates run
+   * from top to bottom.
    * 
    * @param y
    *          Pixel coordinate along imaginary axis.
    * @return Value of the coordinate along the imaginary axis.
    */
   public double getValueAtImaginaryPixel(final double y) {
-    return imMin + y * deltaIm;
+    return imMin + (sizeImaginaryPixels - y - 1) * deltaIm;
   }
 
   @Override

@@ -59,4 +59,5 @@ public interface FractalSet {
    *         empty).
    */
   public List<String> getInfoLines();
+
 }

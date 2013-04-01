@@ -6,12 +6,21 @@
  * 'escape time' algorithm. For background see this <a
  * href="http://en.wikipedia.org/wiki/Mandelbrot_set">wiki page</a>.
  * 
- * @version 0.4.0
- * @version 31.03.2013
+ * @version 0.4.1
+ * @version 01.04.2013
  * @author Anthony Brown
  * @author agabrown@xs4all.nl
  * 
  *         <h2>History</h2>
+ * 
+ *         <p>
+ *         <b>April 2013, version 0.4.1</b>
+ *         <ul>
+ *         <li>Bug fixed in ComplexPlaneView calculation of imaginary pixel
+ *         coordinate.</li>
+ *         <li>JuliaSet made immutable.</li>
+ *         </ul>
+ *         </p>
  * 
  *         <p>
  *         <b>March 2013, version 0.4.0</b>

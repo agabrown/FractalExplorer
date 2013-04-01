@@ -22,8 +22,8 @@ import agabrown.fractalexplorer.util.ExportFormat;
 import agabrown.fractalexplorer.util.FEConstants;
 
 /**
- * Export the plot in the given BPWindow to a file in a user-chosen format (such as postscript,
- * jpeg, pdf, svg etc). Fire up a GUI to take user input.
+ * Export the plot in the FractalExplorerGui to a file in a user-chosen format
+ * (such as postscript, jpeg, pdf, svg etc). Fire up a GUI to take user input.
  * 
  * <pre>
  * Code cribbed from agabplot project.
@@ -139,6 +139,7 @@ public class ExportImageUi extends JFrame implements ActionListener {
     pack();
     setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     setVisible(true);
+    toFront();
 
   }
 
@@ -173,6 +174,7 @@ public class ExportImageUi extends JFrame implements ActionListener {
    * @param actionEvent
    *          ActionEvent object
    */
+  @Override
   public void actionPerformed(final ActionEvent actionEvent) {
 
     final String command = actionEvent.getActionCommand();

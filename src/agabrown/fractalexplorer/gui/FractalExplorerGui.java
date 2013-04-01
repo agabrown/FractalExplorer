@@ -124,7 +124,7 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
   /**
    * Holds the JuliaSet instance.
    */
-  private final JuliaSet juliaSet = new JuliaSet();
+  private JuliaSet juliaSet;
 
   /**
    * Holds the InfoLayerUI instance.
@@ -132,24 +132,36 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
   private final InfoLayerUI infoLayerUI = new InfoLayerUI(this);
 
   /**
+   * Holds the instance of the GraphicsDevice which the FractalExplorer is
+   * using.
+   */
+  private final GraphicsDevice gDevice;
+
+  /**
    * Constructor. Contains code to detect whether or not full screen mode is
    * supported in the graphics environment from which FractalExplorer is
    * invoked.
+   * 
+   * <p>
+   * NOTE: Exits with {@link java.awt.HeadlessException} if the graphics
+   * environment is found to be headless. For example, the programme will not
+   * run on the Linux console.
+   * </p>
    */
   public FractalExplorerGui() {
     super("FractalExplorer");
     selectLookAndFeel();
     fractalSet = mandelbrotSet;
     final GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    final GraphicsDevice device = env.getDefaultScreenDevice();
-    imWidth = device.getDefaultConfiguration().getBounds().width;
-    imHeight = device.getDefaultConfiguration().getBounds().height;
+    gDevice = env.getDefaultScreenDevice();
+    imWidth = gDevice.getDefaultConfiguration().getBounds().width;
+    imHeight = gDevice.getDefaultConfiguration().getBounds().height;
     initializeFields();
     addComponentsToFrame();
-    final boolean isFullScreen = device.isFullScreenSupported();
+    final boolean isFullScreen = gDevice.isFullScreenSupported();
     setUndecorated(isFullScreen);
     if (isFullScreen) {
-      device.setFullScreenWindow(this);
+      gDevice.setFullScreenWindow(this);
       validate();
     } else {
       pack();
@@ -316,8 +328,8 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
   }
 
   /**
-   * Calculate the fractal set by using the "escape time algorithm" implemented
-   * in {@link agabrown.fractalexplorer.sets.MandelbrotSet}.
+   * Calculate the fractal set by using the algorithm implemented in instances
+   * of {@link agabrown.fractalexplorer.sets.FractalSet}.
    */
   private void calculateFractalSet() {
     int i, j;
@@ -441,7 +453,7 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
         showJuliaSet = !showJuliaSet;
         if (showJuliaSet) {
           mandelbrotCpv = (ComplexPlaneView) activeCpv.clone();
-          juliaSet.setMuParameter(activeCpv.getCentreReal(), activeCpv.getCentreImaginary());
+          juliaSet = new JuliaSet(activeCpv.getCentreReal(), activeCpv.getCentreImaginary());
           activeCpv.reset();
           activeCpv.setCentre(0.0, 0.0);
           fractalSet = juliaSet;
