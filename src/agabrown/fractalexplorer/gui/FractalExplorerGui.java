@@ -135,7 +135,8 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
    * Holds the instance of the GraphicsDevice which the FractalExplorer is
    * using.
    */
-  private final GraphicsDevice gDevice;
+  private static final GraphicsDevice GRAPHICS_DEVICE = GraphicsEnvironment.getLocalGraphicsEnvironment()
+      .getDefaultScreenDevice();
 
   /**
    * Constructor. Contains code to detect whether or not full screen mode is
@@ -150,28 +151,28 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
    */
   public FractalExplorerGui() {
     super("FractalExplorer");
-    selectLookAndFeel();
-    fractalSet = mandelbrotSet;
-    final GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    gDevice = env.getDefaultScreenDevice();
-    imWidth = gDevice.getDefaultConfiguration().getBounds().width;
-    imHeight = gDevice.getDefaultConfiguration().getBounds().height;
-    initializeFields();
-    addComponentsToFrame();
-    final boolean isFullScreen = gDevice.isFullScreenSupported();
-    setUndecorated(isFullScreen);
-    if (isFullScreen) {
-      gDevice.setFullScreenWindow(this);
-      validate();
-    } else {
-      pack();
-      setSize(new Dimension(imWidth, imHeight));
-    }
-    setResizable(false);
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
     final SplashScreen splash = new SplashScreen(3000);
     splash.showSplash();
+
+    selectLookAndFeel();
+    fractalSet = mandelbrotSet;
+    imWidth = GRAPHICS_DEVICE.getDefaultConfiguration().getBounds().width;
+    imHeight = GRAPHICS_DEVICE.getDefaultConfiguration().getBounds().height;
+    initializeFields();
+    addComponentsToFrame();
+    setUndecorated(true);
+    // final boolean isFullScreen = GRAPHICS_DEVICE.isFullScreenSupported();
+    // setUndecorated(isFullScreen);
+    // if (isFullScreen) {
+    // GRAPHICS_DEVICE.setFullScreenWindow(this);
+    // validate();
+    // } else {
+    pack();
+    setSize(new Dimension(imWidth, imHeight));
+    // }
+    setResizable(false);
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     setVisible(true);
     toFront();
   }
@@ -401,9 +402,6 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
           viewingPanel.setColourLut(COLOUR_LUTS[lutIndex]);
         }
         break;
-      case KeyEvent.VK_Z:
-        new CenterPointForm(this, activeCpv);
-        break;
       case KeyEvent.VK_1:
         maxIterations = 256;
         showFractal();
@@ -430,6 +428,9 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
           activeCpv.setCentre(0.0, 0.0);
         }
         showFractal();
+        break;
+      case KeyEvent.VK_Z:
+        new CenterPointForm(this, activeCpv);
         break;
       case KeyEvent.VK_S:
         new ExportImageUi(this);
