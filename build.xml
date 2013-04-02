@@ -55,9 +55,14 @@
 
   <target name="compile" depends="init" description="Compiles the fractalexplorer package">
     <echo message="Compiling with Java ${java.version}" />
-    <javac destdir="${classes}" source="1.6" target="1.6" srcdir="${src}" classpathref="build.class.path" includeantruntime="false">
+    <javac destdir="${classes}" source="1.7" target="1.7" srcdir="${src}" classpathref="build.class.path" includeantruntime="false">
       <compilerarg value="-Xlint" />
     </javac>
+  	<copy todir="${classes}/agabrown/fractalexplorer/gui/resources">
+  		<fileset dir="${src}/agabrown/fractalexplorer/gui/resources">
+  			<include name="*"/>
+  		</fileset>
+  		</copy>
     <!--
     <copy todir="${classes}/agabrown/fractalexplorer/gui/help-files">
       <fileset dir="${basedir}/doc-files/help-files"/>

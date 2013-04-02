@@ -19,6 +19,7 @@
  *         <li>Bug fixed in ComplexPlaneView calculation of imaginary pixel
  *         coordinate.</li>
  *         <li>JuliaSet made immutable.</li>
+ *         <li>Fixed build problem with splash screen resources.</li>
  *         </ul>
  *         </p>
  * 

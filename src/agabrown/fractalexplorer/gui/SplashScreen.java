@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
+import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -38,6 +39,11 @@ public final class SplashScreen extends JWindow {
   private final int duration;
 
   /**
+   * Holds the splash screen image url.
+   */
+  private static URL resourceURL;
+
+  /**
    * Constructor.
    * 
    * @param d
@@ -45,11 +51,12 @@ public final class SplashScreen extends JWindow {
    */
   public SplashScreen(final int d) {
     duration = d;
+    resourceURL = SplashScreen.class.getResource("resources/FractalExplorer-splash.png");
   }
 
   /**
-   * A simple little method to show a title screen in the centre of the screen for the amount of
-   * time given in the constructor
+   * A simple little method to show a title screen in the centre of the screen
+   * for the amount of time given in the constructor
    */
   public void showSplash() {
 
@@ -59,7 +66,7 @@ public final class SplashScreen extends JWindow {
     /*
      * Build the splash screen
      */
-    final ImageIcon icon = new ImageIcon(getClass().getResource("resources/FractalExplorer-splash.png"));
+    final ImageIcon icon = new ImageIcon(resourceURL);
     final JLabel image = new JLabel(icon);
     final JLabel name = new JLabel(FEConstants.PROJECT_NAME + " version " + FEConstants.VERSION, JLabel.CENTER);
     name.setFont(new Font("Sans-Serif", Font.BOLD, 12));
