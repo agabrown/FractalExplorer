@@ -3,9 +3,9 @@ package agabrown.fractalexplorer.util;
 /**
  * Defines constants used throughout the {@link agabrown.fractalexplorer}
  * package.
- * 
+ *
  * @author agabrown 23 Jul 2012
- * 
+ *
  */
 public final class FEConstants {
 
@@ -29,12 +29,12 @@ public final class FEConstants {
   /**
    * Author of this project
    */
-  public static final String YEARS = "2012" + "\u2013" + "2013";
+  public static final String YEARS = "2012" + "\u2013" + "2014";
 
   /**
    * Package version.
    */
-  public static final String VERSION = "0.4.1";
+  public static final String VERSION = "0.5.0";
 
   /**
    * The constant 1/2;

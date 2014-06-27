@@ -5,46 +5,38 @@ A fractal viewer implemented in Java. Written mainly for my own entertainment
 and inspired by the Fractile Plus app (http://fractile.net, with no pretence of
 getting even close to the performance and smooth feel of Fractile Plus!).
 
-The Java project is developed on a Linux system within Eclipse and uses ant for
-building. It depends only on the JUnit (http://junit.org) and iText
-(http://itextpdf.com) libraries.
+The Java project is developed on a Linux system within Eclipse and uses Maven for
+depency management and building. It depends only on the JUnit (http://junit.org)
+and iText (http://itextpdf.com) libraries.
 
 Author
 ------
 
 Anthony G.A. Brown
 agabrown at xs4all.nl
+2012--2014
 
 Requirements
 ------------
 
-Make sure the following are in the "lib" folder:
-
-junit-4.11.jar
-hamcrest-core-1.3.jar
-itext-xtra-5.4.4.jar
-itextpdf-5.4.4.jar
-
-Precise version of iText (or JUnit) is not so important, but don't forget to
-adjust the build.xml file if you use a different version.
+Dependencies are managed through Maven (http://maven.apache.org/)
 
 Building the project
 --------------------
 
-Use "ant dist" from the command line.
+Use "mvn package" from the command line.
 
 Documentation
 -------------
 
-Javadocs can be generated with "ant docapi" and then read using a browser.
+Javadocs can be generated with "mvn site" and then read using a browser (find the "site" folder in "target").
 
 Running FractalExplorer
 -----------------------
 
 One can run the explorer as follows:
 
-- ant: "ant run"
-- Java: "java -jar dist/FractalExplorer.jar"
+- Java: "java -jar target/FractalExplorer-x.y.z-SNAPSHOT-jar-with-dependencies.jar"
 - Bash: using the example bash script in the "scripts" folder.
 - ... (your favoured method here)
 

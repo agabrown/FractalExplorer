@@ -17,14 +17,14 @@ import agabrown.fractalexplorer.util.FEConstants;
 
 /**
  * Implements a simple splash screen for the Fractal Explorer GUI.
- * 
+ *
  * <pre>
  * Code idea from:
  * http://www.java-tips.org/java-se-tips/javax.swing/how-to-implement-a-splash-screen-for-an-applic-2.html
  * </pre>
- * 
+ *
  * @author agabrown 25 Jul 2012
- * 
+ *
  */
 public final class SplashScreen extends JWindow {
 
@@ -45,13 +45,13 @@ public final class SplashScreen extends JWindow {
 
   /**
    * Constructor.
-   * 
+   *
    * @param d
    *          Duration of splash screen in milli-seconds.
    */
   public SplashScreen(final int d) {
     duration = d;
-    resourceURL = SplashScreen.class.getResource("resources/FractalExplorer-splash.png");
+    resourceURL = SplashScreen.class.getResource("/FractalExplorer-splash.png");
   }
 
   /**
