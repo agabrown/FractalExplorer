@@ -23,12 +23,13 @@ import agabrown.fractalexplorer.dm.ComplexPlaneView;
 import agabrown.fractalexplorer.sets.FractalSet;
 import agabrown.fractalexplorer.sets.JuliaSet;
 import agabrown.fractalexplorer.sets.MandelbrotSet;
+import agabrown.fractalexplorer.sets.TricornSet;
 
 /**
  * GUI for visually exploring Fractal sets.
- * 
+ *
  * @author agabrown 21 Jul 2012
- * 
+ *
  */
 public class FractalExplorerGui extends JFrame implements KeyListener, MouseListener {
 
@@ -106,6 +107,11 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
   private boolean showJuliaSet;
 
   /**
+   * True if Tricorn set should be shown instead of Mandelbrot set.
+   */
+  private boolean showTricornSet;
+
+  /**
    * Contains the array of colour LUTs available to be applied to the fractal
    * image.
    */
@@ -117,6 +123,11 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
   private int lutIndex;
 
   /**
+   * If true colour scale should be inverted.
+   */
+  private boolean reverseLut;
+
+  /**
    * Holds the MandelBrotSet instance.
    */
   private final MandelbrotSet mandelbrotSet = new MandelbrotSet();
@@ -125,6 +136,11 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
    * Holds the JuliaSet instance.
    */
   private JuliaSet juliaSet;
+
+  /**
+   * Holds the TricornSet instance.
+   */
+  private TricornSet tricornSet;
 
   /**
    * Holds the InfoLayerUI instance.
@@ -142,7 +158,7 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
    * Constructor. Contains code to detect whether or not full screen mode is
    * supported in the graphics environment from which FractalExplorer is
    * invoked.
-   * 
+   *
    * <p>
    * NOTE: Exits with {@link java.awt.HeadlessException} if the graphics
    * environment is found to be headless. For example, the programme will not
@@ -179,7 +195,7 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
 
   /**
    * Main method.
-   * 
+   *
    * @param args
    *          Command line arguments.
    */
@@ -190,7 +206,7 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
 
   /**
    * Get a reference to the viewing panel.
-   * 
+   *
    * @return The instance of ImageViewingPanel used by this explorer.
    */
   protected ImageViewingPanel getViewPanel() {
@@ -200,7 +216,7 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
   /**
    * Obtain the number of iterations used in calculating the image of the
    * Fractal set.
-   * 
+   *
    * @return The maximum number of iterations.
    */
   protected int getMaxIterations() {
@@ -209,7 +225,7 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
 
   /**
    * Get a reference to the active FractalSet instance.
-   * 
+   *
    * @return The reference to the FractalSet instance used by the explorer.
    */
   protected FractalSet getFractalSet() {
@@ -218,7 +234,7 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
 
   /**
    * Get the current view on the complex plane.
-   * 
+   *
    * @return The active complex plane view.
    */
   protected ComplexPlaneView getComplexPlaneView() {
@@ -227,7 +243,7 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
 
   /**
    * Set the complex plane view.
-   * 
+   *
    * @param cpv
    *          New complex plane view data.
    */
@@ -238,7 +254,7 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
 
   /**
    * Check whether the help info layer should be visible or not.
-   * 
+   *
    * @return True if the help info layer should be shown.
    */
   protected boolean showHelp() {
@@ -247,7 +263,7 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
 
   /**
    * Check whether the Julia set is displayed.
-   * 
+   *
    * @return True if the Julia set is displayed.
    */
   protected boolean showJulia() {
@@ -288,7 +304,9 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
     infoVisible = true;
     helpVisible = false;
     showJuliaSet = false;
+    showTricornSet = false;
     lutIndex = 0;
+    reverseLut = true;
   }
 
   /**
@@ -298,6 +316,7 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
     viewingPanel = new ImageViewingPanel();
     viewingPanel.setImageScaling(ImageScaling.LINEAR);
     viewingPanel.setColourLut(ColourLuts.GREYSCALE);
+    viewingPanel.setReverseColourLut(reverseLut);
     viewingPanel.setFocusable(true);
     viewingPanel.addKeyListener(this);
     viewingPanel.addMouseListener(this);
@@ -309,7 +328,7 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
 
   /**
    * Create the fractal information layer for the viewing panel.
-   * 
+   *
    * @return Instance of JLayer that takes care of presenting the information on
    *         the Fractal Explorer state.
    */
@@ -386,8 +405,20 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
         break;
       case KeyEvent.VK_C:
         blackAndWhite = !blackAndWhite;
-        viewingPanel.setImageScaling(blackAndWhite ? ImageScaling.LINEAR : ImageScaling.LOGARITHMIC);
-        viewingPanel.setColourLut(blackAndWhite ? ColourLuts.GREYSCALE : COLOUR_LUTS[lutIndex]);
+        if (blackAndWhite) {
+          viewingPanel.setImageScaling(ImageScaling.LINEAR);
+          viewingPanel.setReverseColourLut(reverseLut);
+          viewingPanel.setColourLut(ColourLuts.GREYSCALE);
+        } else {
+          viewingPanel.setImageScaling(ImageScaling.LOGARITHMIC);
+          viewingPanel.setReverseColourLut(reverseLut);
+          viewingPanel.setColourLut(COLOUR_LUTS[lutIndex]);
+        }
+        showFractal();
+        break;
+      case KeyEvent.VK_D:
+        reverseLut = !reverseLut;
+        viewingPanel.setReverseColourLut(reverseLut);
         showFractal();
         break;
       case KeyEvent.VK_PAGE_DOWN:
@@ -451,6 +482,9 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
         showFractal();
         break;
       case KeyEvent.VK_J:
+        if (showTricornSet) {
+          break;
+        }
         showJuliaSet = !showJuliaSet;
         if (showJuliaSet) {
           mandelbrotCpv = (ComplexPlaneView) activeCpv.clone();
@@ -458,6 +492,23 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
           activeCpv.reset();
           activeCpv.setCentre(0.0, 0.0);
           fractalSet = juliaSet;
+        } else {
+          activeCpv = mandelbrotCpv;
+          fractalSet = mandelbrotSet;
+        }
+        showFractal();
+        break;
+      case KeyEvent.VK_T:
+        if (showJuliaSet) {
+          break;
+        }
+        showTricornSet = !showTricornSet;
+        if (showTricornSet) {
+          mandelbrotCpv = (ComplexPlaneView) activeCpv.clone();
+          tricornSet = new TricornSet(activeCpv.getCentreReal(), activeCpv.getCentreImaginary());
+          activeCpv.reset();
+          activeCpv.setCentre(0.0, 0.0);
+          fractalSet = tricornSet;
         } else {
           activeCpv = mandelbrotCpv;
           fractalSet = mandelbrotSet;

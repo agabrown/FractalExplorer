@@ -3,16 +3,17 @@ package agabrown.fractalexplorer.colours;
 import java.awt.Color;
 import java.util.EnumSet;
 
+import org.apache.commons.math3.special.Erf;
+
 /**
- * Enum that provides colour lookup tables for converting mapped image values (i.e. mapped to the
- * range [0,1]) to java.awt.Colour instances.
- * 
+ * Enum that provides colour lookup tables for converting mapped image values
+ * (i.e. mapped to the range [0,1]) to java.awt.Colour instances.
+ *
  * <pre>
- * Code cribbed from {@code agabrown.agabplot} package.
+ * Code cribbed from agabrown.bplot package.
  * </pre>
- * 
- * @author agabrown 18 Jul 2012
- * 
+ *
+ * @author agabrown Jul 30 2014
  */
 public enum ColourLuts {
 
@@ -23,6 +24,35 @@ public enum ColourLuts {
     @Override
     public Color getColour(final double val) {
       return new Color((float) val, (float) val, (float) val);
+    }
+  },
+  /**
+   * Colour scale for ordered data safe for colour blind viewer (see
+   * http://www.sron.nl/~pault/)
+   */
+  ORANGES("Orange hues for order data; safe for colour blind") {
+    @Override
+    public Color getColour(final double pixValue) {
+      final float rcol = (float) (1.0 - 0.392 * (1.0 + Erf.erf((pixValue - 0.869) / 0.255)));
+      final float gcol = (float) (1.021 - 0.456 * (1.0 + Erf.erf((pixValue - 0.527) / 0.376)));
+      final float bcol = (float) (1.0 - 0.493 * (1.0 + Erf.erf((pixValue - 0.272) / 0.309)));
+      return new Color(rcol, gcol, bcol);
+    }
+  },
+  /**
+   * Colour scale for divergent data safe for colour blind viewer (see
+   * http://www.sron.nl/~pault/)
+   */
+  BLUE_RED_DIVERGENT("Blue to red hues for divergent data; safe for colour blind") {
+    @Override
+    public Color getColour(final double pixValue) {
+      final float rcol = (float) (0.237 - 2.13 * pixValue + 26.92 * Math.pow(pixValue, 2) - 65.5
+          * Math.pow(pixValue, 3) + 63.5 * Math.pow(pixValue, 4) - 22.36 * Math.pow(pixValue, 5));
+      final float gcol = (float) Math.pow((0.572 + 1.524 * pixValue - 1.811 * Math.pow(pixValue, 2))
+          / (1 - 0.291 * pixValue + 0.1574 * Math.pow(pixValue, 2)), 2);
+      final float bcol = (float) (1.0 / (1.579 - 4.03 * pixValue + 12.92 * Math.pow(pixValue, 2) - 31.4
+          * Math.pow(pixValue, 3) + 48.6 * Math.pow(pixValue, 4) - 23.36 * Math.pow(pixValue, 5)));
+      return new Color(rcol, gcol, bcol);
     }
   },
   /**
@@ -175,9 +205,9 @@ public enum ColourLuts {
       } else if (val >= 0.113725 && val < 0.305882) {
         r = (float) ((val - 0.113725) / (0.305882 - 0.113725) * 250.0 / 255.0);
       } else if (val >= 0.305882 && val < 0.862745) {
-        r = (float) (250.0 / 255.0 - ((val - 0.305882) / (0.862745 - 0.305882) * (250.0 - 148.0) / 255.0));
+        r = (float) (250.0 / 255.0 - (val - 0.305882) / (0.862745 - 0.305882) * (250.0 - 148.0) / 255.0);
       } else {
-        r = (float) (148.0 / 255.0 + ((val - 0.862745) / (1.0 - 0.862745) * (255.0 - 148.0) / 255.0));
+        r = (float) (148.0 / 255.0 + (val - 0.862745) / (1.0 - 0.862745) * (255.0 - 148.0) / 255.0);
       }
 
       if (val < 0.109804) {
@@ -214,9 +244,9 @@ public enum ColourLuts {
       } else if (val >= 0.113725 && val < 0.305882) {
         r = (float) ((val - 0.113725) / (0.305882 - 0.113725) * 250.0 / 255.0);
       } else if (val >= 0.305882 && val < 0.862745) {
-        r = (float) (250.0 / 255.0 - ((val - 0.305882) / (0.862745 - 0.305882) * (250.0 - 148.0) / 255.0));
+        r = (float) (250.0 / 255.0 - (val - 0.305882) / (0.862745 - 0.305882) * (250.0 - 148.0) / 255.0);
       } else {
-        r = (float) (148.0 / 255.0 + ((val - 0.862745) / (1.0 - 0.862745) * (255.0 - 148.0) / 255.0));
+        r = (float) (148.0 / 255.0 + (val - 0.862745) / (1.0 - 0.862745) * (255.0 - 148.0) / 255.0);
       }
 
       if (val < 0.109804) {
@@ -326,7 +356,7 @@ public enum ColourLuts {
         g = 0.0f;
       }
       if (val <= BKNOTS[0]) {
-        b = (float) (BOFFSET + (1.0 - BOFFSET) * val / (BKNOTS[0]));
+        b = (float) (BOFFSET + (1.0 - BOFFSET) * val / BKNOTS[0]);
       } else if (val > BKNOTS[0] && val < BKNOTS[1]) {
         b = 1.0f;
       } else if (val > BKNOTS[1] && val < BKNOTS[2]) {
@@ -501,7 +531,7 @@ public enum ColourLuts {
 
   /**
    * Constructor.
-   * 
+   *
    * @param lab
    *          Descriptive string of colour table.
    */
@@ -510,9 +540,10 @@ public enum ColourLuts {
   }
 
   /**
-   * Override the default toString() method for enum types so that a more readable string is
-   * returned whenever the values are to be converted to strings.
-   * 
+   * Override the default toString() method for enum types so that a more
+   * readable string is returned whenever the values are to be converted to
+   * strings.
+   *
    * @return label
    */
   @Override
@@ -521,9 +552,9 @@ public enum ColourLuts {
   }
 
   /**
-   * Given a pixel value scaled between zero and one return the colour from the lookup table
-   * selected when constructing the instance of this class.
-   * 
+   * Given a pixel value scaled between zero and one return the colour from the
+   * selected lookup table selected.
+   *
    * @param pixValue
    *          Image pixel value scaled between 0 and 1.
    * @return The colour from the LUT.
@@ -531,11 +562,12 @@ public enum ColourLuts {
   public abstract Color getColour(double pixValue);
 
   /**
-   * Obtain the colour corresponding to the reversed LUT.
-   * 
+   * Given a pixel value scaled between zero and one return the colour from the
+   * <strong>reversed</strong> selected lookup table selected.
+   *
    * @param pixValue
    *          Image pixel value scaled between 0 and 1.
-   * @return The colour from the reverse LUT.
+   * @return The colour from the <strong>reversed</strong> LUT.
    */
   public Color getReverseColour(final double pixValue) {
     return getColour(1.0 - pixValue);
@@ -543,7 +575,7 @@ public enum ColourLuts {
 
   /**
    * Return all the LUTs defined in this Enum as an array.
-   * 
+   *
    * @return Array of all look-up tables.
    */
   public static ColourLuts[] toArray() {

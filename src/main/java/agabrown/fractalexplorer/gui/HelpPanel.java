@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package agabrown.fractalexplorer.gui;
 
@@ -17,9 +17,9 @@ import javax.swing.JPanel;
  * {@link agabrown.fractalexplorer.gui.FractalExplorerGui}. The help information
  * is displayed as a table with entries for the keys/mouse-buttons and their
  * functions.
- * 
+ *
  * @author agabrown 24 Jul 2012
- * 
+ *
  */
 public final class HelpPanel extends JPanel {
 
@@ -42,12 +42,14 @@ public final class HelpPanel extends JPanel {
    * Help table entries.
    */
   private static final String[][] HELP_DATA = { { "h", "Toggle help screen visible" },
-      { "ESC", "Exit FractalExplorer" }, { "z", "Set complex number at centre of image and the zoom factor" },
-      { "+", "Zoom in by factor 2" }, { "-", "Zoom out by factor two" }, { "j", "Toggle showing Julia set" },
-      { "i", "Toggle information layer" }, { "Left mouse-button/Enter", "Centre on complex number at mouse pointer" },
-      { "1 ... 5", "Set the maximum number of iterations (256 ... 4096)" },
-      { "r", "Reset image to initial centre point and zoom factor" }, { "s", "Save current image to file" },
-      { "c", "Toggle use of colour LUT" }, { "Page-up/page-down", "Cycle through colour LUTs" } };
+    { "ESC", "Exit FractalExplorer" }, { "z", "Set complex number at centre of image and the zoom factor" },
+    { "+", "Zoom in by factor 2" }, { "-", "Zoom out by factor two" },
+    { "j", "Toggle between Julia and Mandelbrot sets" }, { "t", "Toggle between Tricorn and Mandelbrot sets" },
+    { "i", "Toggle information layer" }, { "Left mouse-button/Enter", "Centre on complex number at mouse pointer" },
+    { "1 ... 5", "Set the maximum number of iterations (256 ... 4096)" },
+    { "r", "Reset image to initial centre point and zoom factor" }, { "s", "Save current image to file" },
+    { "c", "Toggle use of colour LUT" }, { "Page-up/page-down", "Cycle through colour LUTs" },
+      { "d", "Invert colour scale" } };
 
   /**
    * Constructor.
@@ -74,7 +76,7 @@ public final class HelpPanel extends JPanel {
   /**
    * Draw the help table by simply placing the text on the GlassPane by absolute
    * positioning.
-   * 
+   *
    * @param g2d
    *          Graphics context used for drawing.
    * @param frc

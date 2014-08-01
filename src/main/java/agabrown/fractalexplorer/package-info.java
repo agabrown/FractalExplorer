@@ -1,18 +1,33 @@
 /**
  * Provides classes for visually exploring Fractal sets (such as the Mandelbrot
  * set).
- * 
+ *
  * For now only the Mandelbrot set is implemented and it is visualized using the
  * 'escape time' algorithm. For background see this <a
  * href="http://en.wikipedia.org/wiki/Mandelbrot_set">wiki page</a>.
- * 
- * @version 0.4.1
- * @version 01.04.2013
+ *
+ * @version 0.6.0
+ * @version 31.07.2014
  * @author Anthony Brown
  * @author agabrown@xs4all.nl
- * 
+ *
  *         <h2>History</h2>
  * 
+ *         <p>
+ *         <b>July 2014, version 0.6.0</b>
+ *         <ul>
+ *         <li>Added Tricorn (Mandelbar) set.</li>
+ *         <li>Better colour LUT management.</li>
+ *         </ul>
+ *         </p>
+ *
+ *         <p>
+ *         <b>June 2014, version 0.5.0</b>
+ *         <ul>
+ *         <li>Moved to Maven project management</li>
+ *         </ul>
+ *         </p>
+ *
  *         <p>
  *         <b>April 2013, version 0.4.1</b>
  *         <ul>
@@ -22,7 +37,7 @@
  *         <li>Fixed build problem with splash screen resources.</li>
  *         </ul>
  *         </p>
- * 
+ *
  *         <p>
  *         <b>March 2013, version 0.4.0</b>
  *         <ul>
@@ -30,14 +45,14 @@
  *         instantiating a window that takes up the full screen.</li>
  *         </ul>
  *         </p>
- * 
+ *
  *         <p>
  *         <b>March 2013, version 0.3.2</b>
  *         <ul>
  *         <li>Updated dependencies and build file.</li>
  *         </ul>
  *         </p>
- * 
+ *
  *         <p>
  *         <b>August 2012, version 0.3.1</b>
  *         <ul>
@@ -46,7 +61,7 @@
  *         interface.</li>
  *         </ul>
  *         </p>
- * 
+ *
  *         <p>
  *         <b>July 2012, version 0.3.0</b>
  *         <ul>
@@ -54,7 +69,7 @@
  *         {@link agabrown.fractalexplorer.dm.ComplexPlaneView} data type.</li>
  *         </ul>
  *         </p>
- * 
+ *
  *         <p>
  *         <b>July 2012, version 0.2.0</b>
  *         <ul>
@@ -64,7 +79,7 @@
  *         <li>Added Julia set and created FractalSet interface.</li>
  *         </ul>
  *         </p>
- * 
+ *
  *         <p>
  *         <b>July 2012, version 0.1.1</b>
  *         <ul>
@@ -76,7 +91,7 @@
  *         pixels all at same value.</li>
  *         </ul>
  *         </p>
- * 
+ *
  *         <p>
  *         <b>July 2012, version 0.1.0</b>
  *         <ul>
