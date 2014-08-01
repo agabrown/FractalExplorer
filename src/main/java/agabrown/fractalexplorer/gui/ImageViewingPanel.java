@@ -115,7 +115,7 @@ public final class ImageViewingPanel extends JPanel {
 
   /**
    * Set whether or not the colour scale should be reversed.
-   * 
+   *
    * @param rev
    *          If true reverse the colour scale.
    */
@@ -176,6 +176,12 @@ public final class ImageViewingPanel extends JPanel {
   public void paintComponent(final Graphics g) {
     super.paintComponent(g);
     final Graphics2D g2 = (Graphics2D) g;
+    if (bimg == null) {
+      return;
+    }
+    if (bimg.getWidth() < 0 || bimg.getHeight() < 0) {
+      return;
+    }
     g2.drawImage(bimg, 0, 0, null);
     g2.dispose();
   }

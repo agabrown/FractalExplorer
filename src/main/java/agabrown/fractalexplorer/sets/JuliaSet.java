@@ -5,11 +5,13 @@ import java.util.List;
 
 /**
  * Provides methods for evaluating whether or not a point z<sub>0</sub> belongs
- * to the Julia set. The polynomial f(z)=z<sup>2</sup>+&mu; is iterated with
- * starting point z<sub>0</sub>.
- * 
+ * to a Julia set <strong>according to the escape time algorithm</strong>. The
+ * polynomial f(z)=z<sup>2</sup>+&mu; is iterated with starting point
+ * z<sub>0</sub>. The value of &mu; is kept fixed, while z<sub>0</sub> is varied
+ * over the complex plane.
+ *
  * @author agabrown 26 Jul 2012
- * 
+ *
  */
 public final class JuliaSet implements FractalSet {
 
@@ -18,7 +20,7 @@ public final class JuliaSet implements FractalSet {
    * this limit in magnitude, it is assumed to go off to infinity (and then thus
    * not belong to the Julia set).
    */
-  private static final double BOUND = 2;
+  private static final double BOUND = 2.0;
 
   /**
    * Square of BOUND.
@@ -59,7 +61,7 @@ public final class JuliaSet implements FractalSet {
 
   /**
    * Constructor. Sets the value for &mu;.
-   * 
+   *
    * @param muRe
    *          Real part of &mu;.
    * @param muIm
@@ -73,7 +75,7 @@ public final class JuliaSet implements FractalSet {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see agabrown.fractalexplorer.sets.FractalSet#isPointInSet(double, double,
    * int)
    */
@@ -88,7 +90,7 @@ public final class JuliaSet implements FractalSet {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see
    * agabrown.fractalexplorer.sets.FractalSet#numberOfIterationsForPoint(double,
    * double, int)
@@ -130,7 +132,7 @@ public final class JuliaSet implements FractalSet {
   /**
    * Check if the complex input number is in the Julia set given the parameter
    * &mu;.
-   * 
+   *
    * @param real
    *          Real part of complex number (z<sub>0</sub>) to check
    * @param imaginary
@@ -139,7 +141,7 @@ public final class JuliaSet implements FractalSet {
    *          Maximum number of iterations to decide on whether or not the
    *          number is in the set. Numbers for which maxIter is exceeded are
    *          considered to be part of the set.
-   * 
+   *
    * @return Number of iterations used.
    */
   private int iterateSeries(final double real, final double imaginary, final int maxIter) {
