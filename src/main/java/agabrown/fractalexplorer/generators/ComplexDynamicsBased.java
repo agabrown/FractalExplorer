@@ -24,14 +24,14 @@ public abstract class ComplexDynamicsBased implements FractalGenerator {
   protected ComplexFunctionIterator theIterator;
 
   /**
-   * If true iterate over the conjugate of z rather than z (i.e. z ->
-   * f(conjugate(z))).
+   * If true iterate over the conjugate of z rather than z (i.e. z<sub>n+1</sub>
+   * = f(conjugate(z<sub>n</sub>))).
    */
   protected boolean iterateConjugate = false;
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see
    * agabrown.fractalexplorer.generators.FractalGenerator#generateImage(agabrown
    * .fractalexplorer.dm.ComplexPlaneView)
@@ -72,7 +72,7 @@ public abstract class ComplexDynamicsBased implements FractalGenerator {
 
   /**
    * Set the colouring algorithm for the fractal image.
-   * 
+   *
    * @param ca
    *          The colouring algorithm.
    */

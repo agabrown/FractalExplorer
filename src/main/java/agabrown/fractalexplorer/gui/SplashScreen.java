@@ -12,6 +12,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JWindow;
+import javax.swing.SwingUtilities;
 
 import agabrown.fractalexplorer.util.FEConstants;
 
@@ -26,12 +27,7 @@ import agabrown.fractalexplorer.util.FEConstants;
  * @author agabrown 25 Jul 2012
  *
  */
-public final class SplashScreen extends JWindow {
-
-  /**
-   * Required for serializable classes.
-   */
-  private static final long serialVersionUID = -6783272139647153927L;
+public final class SplashScreen {
 
   /**
    * Duration of splash screen in milli-seconds.
@@ -41,7 +37,7 @@ public final class SplashScreen extends JWindow {
   /**
    * Holds the splash screen image url.
    */
-  private static URL resourceURL;
+  private final URL resourceURL;
 
   /**
    * Constructor.
@@ -60,7 +56,8 @@ public final class SplashScreen extends JWindow {
    */
   public void showSplash() {
 
-    final JPanel container = (JPanel) getContentPane();
+    final JWindow splashWindow = new JWindow();
+    final JPanel container = (JPanel) splashWindow.getContentPane();
     container.setBackground(Color.black);
 
     /*
@@ -87,7 +84,7 @@ public final class SplashScreen extends JWindow {
     final Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
     final int x = (screen.width - width) / 2;
     final int y = (screen.height - height) / 2;
-    setBounds(x, y, width, height);
+    splashWindow.setBounds(x, y, width, height);
 
     container.setLayout(new GridBagLayout());
     final GridBagConstraints constraints = new GridBagConstraints();
@@ -105,8 +102,13 @@ public final class SplashScreen extends JWindow {
     /*
      * Display it
      */
-    pack();
-    setVisible(true);
+    splashWindow.pack();
+    SwingUtilities.invokeLater(new Runnable() {
+      @Override
+      public void run() {
+        splashWindow.setVisible(true);
+      }
+    });
 
     /*
      * Wait a little while, maybe while loading resources
@@ -116,7 +118,7 @@ public final class SplashScreen extends JWindow {
     } catch (final Exception e) {
     }
 
-    setVisible(false);
+    splashWindow.dispose();
 
   }
 }

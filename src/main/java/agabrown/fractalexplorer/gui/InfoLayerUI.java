@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.plaf.LayerUI;
@@ -17,9 +18,9 @@ import agabrown.fractalexplorer.dm.ComplexPlaneView;
  * Explorer main image. Shows where in the focal plane we are, at what zoom
  * factor and how many iterations are used for the Fractal set escape time
  * algorithm.
- * 
+ *
  * @author agabrown 24 Jul 2012
- * 
+ *
  */
 public final class InfoLayerUI extends LayerUI<JComponent> {
 
@@ -27,11 +28,6 @@ public final class InfoLayerUI extends LayerUI<JComponent> {
    * Required for serializable classes.
    */
   private static final long serialVersionUID = 1058838429214094654L;
-
-  /**
-   * The parent of this LayerUI.
-   */
-  private final FractalExplorerGui explorer;
 
   /**
    * Height of text line in pixels.
@@ -43,16 +39,19 @@ public final class InfoLayerUI extends LayerUI<JComponent> {
    */
   private boolean showInfo = true;
 
+  private String fractalName;
+
+  private List<String> infoLines;
+
+  private ComplexPlaneView cpvData;
+
+  private int maxIterations;
+
   /**
-   * Constructor. Sets the parent explorer GUI, which is polled for the relevant
-   * data.
-   * 
-   * @param feGui
-   *          The parent explorer GUI.
+   * Constructor which initializes the relevant data for drawing the info layer.
    */
-  public InfoLayerUI(final FractalExplorerGui feGui) {
+  public InfoLayerUI() {
     super();
-    explorer = feGui;
   }
 
   @Override
@@ -65,16 +64,15 @@ public final class InfoLayerUI extends LayerUI<JComponent> {
     }
     final FontRenderContext frc = g2.getFontRenderContext();
     final Font textFont = new Font(Font.SANS_SERIF, Font.BOLD, 10);
-    final ComplexPlaneView cpvData = explorer.getComplexPlaneView();
-    final int numLines = 5 + explorer.getFractalSet().getInfoLines().size();
+    final int numLines = 5 + infoLines.size();
     int lineNumber = 0;
     final int lineZeroY = 10 + LINE_HEIGHT;
     g2.setColor(new Color(255, 255, 255, 192));
     g2.fillRect(10, 10, 250, numLines * LINE_HEIGHT + LINE_HEIGHT);
     g2.setColor(Color.black);
-    TextLayout textBox = new TextLayout(explorer.getFractalSet().getName(), textFont, frc);
+    TextLayout textBox = new TextLayout(fractalName, textFont, frc);
     textBox.draw(g2, 20, lineZeroY);
-    for (final String line : explorer.getFractalSet().getInfoLines()) {
+    for (final String line : infoLines) {
       lineNumber++;
       textBox = new TextLayout(line, textFont, frc);
       textBox.draw(g2, 20, lineZeroY + lineNumber * LINE_HEIGHT);
@@ -89,19 +87,59 @@ public final class InfoLayerUI extends LayerUI<JComponent> {
     textBox = new TextLayout("Zoom: " + cpvData.getZoomFactor(), textFont, frc);
     textBox.draw(g2, 20, lineZeroY + lineNumber * LINE_HEIGHT);
     lineNumber++;
-    textBox = new TextLayout("Iterations: " + explorer.getMaxIterations(), textFont, frc);
+    textBox = new TextLayout("Iterations: " + maxIterations, textFont, frc);
     textBox.draw(g2, 20, lineZeroY + lineNumber * LINE_HEIGHT);
     g2.dispose();
   }
 
   /**
    * Set whether or not the information layer is visible.
-   * 
+   *
    * @param show
    *          If true show the information layer.
    */
   public void setVisible(final boolean show) {
     showInfo = show;
+  }
+
+  /**
+   * Set the name of the fractal being displayed.
+   *
+   * @param fractalName
+   *          The name of the fractal.
+   */
+  public void setFractalName(final String fractalName) {
+    this.fractalName = fractalName;
+  }
+
+  /**
+   * Set the information lines corresponding to the fractal being displayed.
+   *
+   * @param infoLines
+   *          The information lines.
+   */
+  public void setInfoLines(final List<String> infoLines) {
+    this.infoLines = infoLines;
+  }
+
+  /**
+   * Set the active complex plane view.
+   * 
+   * @param cpvData
+   *          The complex plane view.
+   */
+  public void setCpvData(final ComplexPlaneView cpvData) {
+    this.cpvData = cpvData;
+  }
+
+  /**
+   * Set maximum number of iterations currently used.
+   * 
+   * @param maxIterations
+   *          Maximum number of iterations.
+   */
+  public void setMaxIterations(final int maxIterations) {
+    this.maxIterations = maxIterations;
   }
 
 }

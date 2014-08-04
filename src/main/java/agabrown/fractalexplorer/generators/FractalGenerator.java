@@ -1,5 +1,7 @@
 package agabrown.fractalexplorer.generators;
 
+import java.util.List;
+
 import agabrown.fractalexplorer.dm.ComplexPlaneView;
 
 /**
@@ -23,4 +25,19 @@ public interface FractalGenerator {
    */
   public double[] generateImage(ComplexPlaneView cpv);
 
+  /**
+   * Obtain a string containing the name of the fractal generator.
+   *
+   * @return The name of the fractal generator.
+   */
+  public String getName();
+
+  /**
+   * Provide information on the fractal generator parameters as a list of
+   * strings.
+   *
+   * @return List of strings describing the fractal generator parameters (can be
+   *         empty).
+   */
+  public List<String> getInfoLines();
 }

@@ -1,6 +1,6 @@
 package agabrown.fractalexplorer.generators;
 
-import java.util.function.UnaryOperator;
+import java.util.function.Function;
 
 import org.apache.commons.math3.complex.Complex;
 
@@ -30,9 +30,9 @@ public final class FractalGeneratorFactory {
    *
    * @return A pre-configured version of MandelbrotGenerator.
    */
-  public static ComplexDynamicsBased getMandelbrotEscapeTime() {
-    final UnaryOperator<Complex> f = z -> z.multiply(z);
-    final ComplexDynamicsBased result = new MandelbrotGenerator.Builder().colouringAlgorithm(new EscapeTime())
+  public static MandelbrotGenerator getMandelbrotEscapeTime() {
+    final Function<Complex, Complex> f = z -> z.multiply(z);
+    final MandelbrotGenerator result = new MandelbrotGenerator.Builder().colouringAlgorithm(new EscapeTime())
         .maximumIterations(DEFAULT_ITERATIONS).stoppingRadius(DEFAULT_STOPPING_RADIUS).generatingFunction(f).build();
     return result;
   }
@@ -45,11 +45,11 @@ public final class FractalGeneratorFactory {
    *          Value of fixed constant.
    * @return A pre-configured version of JuliaFatouGenerator.
    */
-  public static ComplexDynamicsBased getJuliaClassicEscapeTime(final Complex mu) {
-    final UnaryOperator<Complex> f = z -> z.multiply(z);
-    final ComplexDynamicsBased result = new JuliaFatouGenerator.Builder().colouringAlgorithm(new EscapeTime())
+  public static JuliaFatouGenerator getJuliaClassicEscapeTime(final Complex mu) {
+    final Function<Complex, Complex> f = z -> z.multiply(z);
+    final JuliaFatouGenerator result = new JuliaFatouGenerator.Builder().colouringAlgorithm(new EscapeTime())
         .maximumIterations(DEFAULT_ITERATIONS).stoppingRadius(DEFAULT_STOPPING_RADIUS)
-        .generatingFunction((UnaryOperator<Complex>) f.andThen(z -> z.add(mu))).build();
+        .generatingFunction(f.andThen(z -> z.add(mu))).build();
     return result;
   }
 }

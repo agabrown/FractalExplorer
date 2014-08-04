@@ -1,7 +1,8 @@
 package agabrown.fractalexplorer.generators;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.function.UnaryOperator;
+import java.util.function.Function;
 
 import org.apache.commons.math3.complex.Complex;
 
@@ -19,6 +20,31 @@ import agabrown.fractalexplorer.dm.ComplexPlaneView;
 public final class JuliaFatouGenerator extends ComplexDynamicsBased {
 
   /**
+   * Name of fractal generator.
+   */
+  private static final String NAME = "Julia-Fatou";
+
+  /**
+   * Unicode code for the letter &mu;.
+   */
+  private static final int MU_UNICODE = 0x03BC;
+
+  /**
+   * Contains the info text lines.
+   */
+  private ArrayList<String> infoLines;
+
+  /**
+   * Real part of Julia set parameter &mu;.
+   */
+  private double muReal;
+
+  /**
+   * Imaginary part of Julia set parameter &mu;.
+   */
+  private double muImaginary;
+
+  /**
    * Inner class used for implementing the builder pattern.
    *
    * @author agabrown Aug 2014
@@ -26,7 +52,7 @@ public final class JuliaFatouGenerator extends ComplexDynamicsBased {
    */
   public static class Builder {
     private ColouringAlgorithm colouringAlgorithm;
-    private UnaryOperator<Complex> generatingFunction;
+    private Function<Complex, Complex> generatingFunction;
     private double stoppingRadius;
     private int maxIterations;
 
@@ -80,7 +106,7 @@ public final class JuliaFatouGenerator extends ComplexDynamicsBased {
      *          The generating function.
      * @return The builder.
      */
-    public Builder generatingFunction(final UnaryOperator<Complex> g) {
+    public Builder generatingFunction(final Function<Complex, Complex> g) {
       generatingFunction = g;
       return this;
     }
@@ -107,6 +133,26 @@ public final class JuliaFatouGenerator extends ComplexDynamicsBased {
     this.colouringAlgorithm = builder.colouringAlgorithm;
     this.theIterator = ComplexFunctionIterator.getInstance(builder.maxIterations, builder.stoppingRadius,
         builder.generatingFunction);
+    intializeInfoLines();
+  }
+
+  /**
+   * Initialize the constant parts of the lines with information on the Julia
+   * Set parameters.
+   */
+  private void intializeInfoLines() {
+    infoLines = new ArrayList<>();
+    StringBuilder line = new StringBuilder("Re(");
+    line.appendCodePoint(MU_UNICODE);
+    line.append(") = ");
+    line.append(muReal);
+    infoLines.add(line.toString());
+    line = new StringBuilder("Im(");
+    line.appendCodePoint(MU_UNICODE);
+    line.append(") = ");
+    line.append(muImaginary);
+    infoLines.add(line.toString());
+    infoLines.trimToSize();
   }
 
   /*
@@ -139,6 +185,16 @@ public final class JuliaFatouGenerator extends ComplexDynamicsBased {
       fractalImage[k] = colouringAlgorithm.getPixelValue(iterates);
     }
     return fractalImage;
+  }
+
+  @Override
+  public String getName() {
+    return NAME;
+  }
+
+  @Override
+  public List<String> getInfoLines() {
+    return infoLines;
   }
 
 }

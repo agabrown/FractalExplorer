@@ -1,6 +1,7 @@
 package agabrown.fractalexplorer.gui;
 
 import java.awt.Container;
+import java.awt.Dialog;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -10,7 +11,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -21,41 +22,36 @@ import agabrown.fractalexplorer.dm.ComplexPlaneView;
 /**
  * Provides the simple form that is used to enter the point that the Fractal
  * explorer should be centred on.
- * 
+ *
  * @author agabrown 23 Jul 2012
- * 
+ *
  */
-public final class CenterPointForm extends JFrame implements ActionListener {
-
-  /**
-   * Required for serializable classes.
-   */
-  private static final long serialVersionUID = 5365486744309424317L;
+public final class CenterPointForm implements ActionListener {
 
   /**
    * Holds the complex plane view of the Fractal set.
    */
-  private final ComplexPlaneView cpvData;
+  private ComplexPlaneView cpvData;
+
+  /**
+   * Holds the object that represents the dialog requesting user input.
+   */
+  private JDialog dialog;
 
   /**
    * Text field for entering the real part of the centre point.
    */
-  private final JTextField realPartText;
+  private JTextField realPartText;
 
   /**
    * Text field for entering the imaginary part of the centre point.
    */
-  private final JTextField imagPartText;
+  private JTextField imagPartText;
 
   /**
    * Text field for entering the zoom factor.
    */
-  private final JTextField zoomText;
-
-  /**
-   * FractalExplorerGui that is parent of this form.
-   */
-  private final FractalExplorerGui explorer;
+  private JTextField zoomText;
 
   /**
    * Defines the action commands associated with this GUI element.
@@ -67,16 +63,16 @@ public final class CenterPointForm extends JFrame implements ActionListener {
     /**
      * Tooltip for this command.
      */
-    private String tooltip;
+    private final String tooltip;
 
     /**
      * Short string for use in setting action commands.
      */
-    private String command;
+    private final String command;
 
     /**
      * Constructor.
-     * 
+     *
      * @param tip
      *          Tooltip for this command.
      * @param command
@@ -89,17 +85,34 @@ public final class CenterPointForm extends JFrame implements ActionListener {
   }
 
   /**
-   * Constructor. Creates the form and puts it up on the screen.
-   * 
-   * @param feGui
-   *          FractalExplorerGui instance that is the parent of this form.
+   * Use the input complex plane view to initialize the dialog and show the
+   * dialog. After the dialog is closed the new complex plane view data is
+   * returned.
+   *
    * @param cpv
-   *          Current zoom data.
+   *          The input complex plane view.
+   * @return The new complex plane view.
    */
-  protected CenterPointForm(final FractalExplorerGui feGui, final ComplexPlaneView cpv) {
-    super("Centre point form");
-    explorer = feGui;
+  protected ComplexPlaneView showFormAndGetCpvData(final ComplexPlaneView cpv) {
     cpvData = (ComplexPlaneView) cpv.clone();
+    dialog = createDialog();
+    /*
+     * Set dialog visible on the same thread as the main application to make
+     * sure it blocks other actions until use input has been received.
+     */
+    dialog.setVisible(true);
+    return (ComplexPlaneView) cpvData.clone();
+  }
+
+  /**
+   * Create a JDialog instance for requesting user input on the complex plane
+   * view.
+   *
+   * @return Fresh JDialog instance.
+   */
+  private JDialog createDialog() {
+    final JDialog dialog = new JDialog();
+    dialog.setTitle("Set centre and zoom factor");
 
     /*
      * Define the main buttons
@@ -144,7 +157,7 @@ public final class CenterPointForm extends JFrame implements ActionListener {
     /*
      * Put it all together.
      */
-    final Container container = getContentPane();
+    final Container container = dialog.getContentPane();
     container.setLayout(new GridBagLayout());
     final GridBagConstraints constraints = new GridBagConstraints();
 
@@ -154,28 +167,28 @@ public final class CenterPointForm extends JFrame implements ActionListener {
     constraints.gridy = 1;
     container.add(buttonsPanel, constraints);
 
-    pack();
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    setVisible(true);
+    dialog.pack();
+    dialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    return dialog;
   }
 
   @Override
   public void actionPerformed(final ActionEvent e) {
     final String command = e.getActionCommand();
     if (command.equals(ActionCommands.CANCEL.command)) {
-      dispose();
+      dialog.dispose();
     }
     if (command.equals(ActionCommands.DONE.command)) {
       if (readFields()) {
-        explorer.setComplexPlaneView(cpvData);
-        dispose();
+        dialog.dispose();
       }
     }
   }
 
   /**
    * Read the edited text fields in the form.
-   * 
+   *
    * @return True if the parsing of the data was successful.
    */
   private boolean readFields() {
@@ -187,7 +200,7 @@ public final class CenterPointForm extends JFrame implements ActionListener {
       cpvData.setZoomFactor(z);
       return true;
     } catch (final NumberFormatException nfe) {
-      JOptionPane.showMessageDialog(this, "Number format exception occured. Check your input",
+      JOptionPane.showMessageDialog(dialog, "Number format exception occured. Check your input",
           "Zoom point input error.", JOptionPane.WARNING_MESSAGE);
       return false;
     }

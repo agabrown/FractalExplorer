@@ -1,7 +1,8 @@
 package agabrown.fractalexplorer.generators;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.function.UnaryOperator;
+import java.util.function.Function;
 
 import org.apache.commons.math3.complex.Complex;
 
@@ -20,10 +21,15 @@ import agabrown.fractalexplorer.dm.ComplexPlaneView;
 public final class MandelbrotGenerator extends ComplexDynamicsBased {
 
   /**
+   * Name of fractal generator.
+   */
+  private static final String NAME = "Mandelbrot";
+
+  /**
    * The function f(z) used for generating the Fractal image. Note that the
    * iterations are over f(z)+c.
    */
-  private final UnaryOperator<Complex> baseGeneratingFunction;
+  private final Function<Complex, Complex> baseGeneratingFunction;
 
   /**
    * Inner class used for implementing the builder pattern.
@@ -33,7 +39,7 @@ public final class MandelbrotGenerator extends ComplexDynamicsBased {
    */
   public static class Builder {
     private ColouringAlgorithm colouringAlgorithm;
-    private UnaryOperator<Complex> generatingFunction;
+    private Function<Complex, Complex> generatingFunction;
     private double stoppingRadius;
     private int maxIterations;
 
@@ -87,7 +93,7 @@ public final class MandelbrotGenerator extends ComplexDynamicsBased {
      *          The generating function.
      * @return The builder.
      */
-    public Builder generatingFunction(final UnaryOperator<Complex> g) {
+    public Builder generatingFunction(final Function<Complex, Complex> g) {
       generatingFunction = g;
       return this;
     }
@@ -140,7 +146,7 @@ public final class MandelbrotGenerator extends ComplexDynamicsBased {
       x = cpv.getValueAtRealPixel(i);
       y = cpv.getValueAtImaginaryPixel(j);
       final Complex c = Complex.valueOf(x, y);
-      theIterator.setFunction((UnaryOperator<Complex>) baseGeneratingFunction.andThen(z -> z.add(c)));
+      theIterator.setFunction(baseGeneratingFunction.andThen(z -> z.add(c)));
       if (iterateConjugate) {
         iterates = theIterator.iterateConjugate(zStart);
       } else {
@@ -149,5 +155,15 @@ public final class MandelbrotGenerator extends ComplexDynamicsBased {
       fractalImage[k] = colouringAlgorithm.getPixelValue(iterates);
     }
     return fractalImage;
+  }
+
+  @Override
+  public String getName() {
+    return NAME;
+  }
+
+  @Override
+  public List<String> getInfoLines() {
+    return new ArrayList<>(0);
   }
 }

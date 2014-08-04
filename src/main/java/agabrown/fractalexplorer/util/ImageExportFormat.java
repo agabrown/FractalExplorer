@@ -18,46 +18,48 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import agabrown.fractalexplorer.gui.ImageViewingPanel;
-
 /**
- * Defines the different file formats that can be used to export images and also contains the
- * methods to do the actual exporting.
- * 
+ * Defines the different file formats that can be used to export images and also
+ * contains the methods to do the actual exporting.
+ *
  * <pre>
  * Code cribbed from agabplot project.
  * </pre>
- * 
+ *
  * @author Anthony Brown Jul 2012
- * 
+ *
  */
-public enum ExportFormat {
+public enum ImageExportFormat {
 
   /**
    * Export the image to a PDF file. The PDF is created using the <a
-   * href="http://itextpdf.com/">iText</a> library. The code was taken and modified from the
-   * Graphics2D example in the iText tutorial.
+   * href="http://itextpdf.com/">iText</a> library. The code was taken and
+   * modified from the Graphics2D example in the iText tutorial.
    */
   PDF("Adobe Portable Document Format | PDF") {
     @Override
-    public void export(final ImageViewingPanel viewPanel, final String fileName, final int w, final int h)
-        throws Exception {
+    public void export(final BufferedImage bimg, final String fileName) throws Exception {
       final Dimension pageFrame = new Dimension();
+      final int w = bimg.getWidth();
+      final int h = bimg.getHeight();
       pageFrame.setSize(w, h);
       /*
-       * step 1: creation of a document-object. Use a custom page size (which fits around the
-       * figure) making use of iText's Rectangle class to define the dimensions (note that it can
-       * also be used for background colouring for example).
+       * step 1: creation of a document-object. Use a custom page size (which
+       * fits around the figure) making use of iText's Rectangle class to define
+       * the dimensions (note that it can also be used for background colouring
+       * for example).
        */
       final Document document = new Document(new Rectangle(w, h));
 
       /*
-       * step 2: create a writer that listens to the document and directs a PDF-stream to a file
+       * step 2: create a writer that listens to the document and directs a
+       * PDF-stream to a file
        */
       final PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(fileName));
 
       /*
-       * Add creation date and information on the application that created the document.
+       * Add creation date and information on the application that created the
+       * document.
        */
       document.addCreationDate();
       document.addAuthor(System.getenv("USER"));
@@ -69,12 +71,13 @@ public enum ExportFormat {
       document.open();
 
       /*
-       * step 4: create the ContentByte and a Graphics2D object that corresponds to it
+       * step 4: create the ContentByte and a Graphics2D object that corresponds
+       * to it
        */
       final PdfContentByte canvas = writer.getDirectContent();
       final Graphics2D pdfg2d = new PdfGraphics2D(canvas, w, h);
 
-      viewPanel.paintComponentOffScreen(pdfg2d);
+      pdfg2d.drawImage(bimg, 0, 0, null);
 
       pdfg2d.dispose();
 
@@ -91,13 +94,15 @@ public enum ExportFormat {
 
   },
   /**
-   * Export the plot to a PNG file. Code taken from example in Image I/O API guide.
+   * Export the plot to a PNG file. Code taken from example in Image I/O API
+   * guide.
    */
   PNG("Portable Network Graphics | PNG") {
     @Override
-    public void export(final ImageViewingPanel viewPanel, final String fileName, final int w, final int h)
-        throws Exception {
+    public void export(final BufferedImage bimg, final String fileName) throws Exception {
       final Dimension pageFrame = new Dimension();
+      final int w = bimg.getWidth();
+      final int h = bimg.getHeight();
       pageFrame.setSize(w, h);
 
       /*
@@ -107,7 +112,8 @@ public enum ExportFormat {
       final ImageWriter writer = writers.next();
 
       /*
-       * Once an ImageWriter has been obtained, its destination must be set to an ImageOutputStream:
+       * Once an ImageWriter has been obtained, its destination must be set to
+       * an ImageOutputStream:
        */
       final File f = new File(fileName);
       final ImageOutputStream ios = ImageIO.createImageOutputStream(f);
@@ -122,7 +128,7 @@ public enum ExportFormat {
       final Color saveColor = big2d.getColor();
       big2d.fillRect(0, 0, w, h);
       big2d.setColor(saveColor);
-      viewPanel.paintComponentOffScreen(big2d);
+      big2d.drawImage(bimg, 0, 0, null);
       writer.write(bi);
 
       ios.close();
@@ -137,13 +143,15 @@ public enum ExportFormat {
 
   },
   /**
-   * Export the plot to a JPEG file. Code taken from example in Image I/O API guide.
+   * Export the plot to a JPEG file. Code taken from example in Image I/O API
+   * guide.
    */
   JPEG("Joint Photographic Experts Group | JPEG") {
     @Override
-    public void export(final ImageViewingPanel viewPanel, final String fileName, final int w, final int h)
-        throws Exception {
+    public void export(final BufferedImage bimg, final String fileName) throws Exception {
       final Dimension pageFrame = new Dimension();
+      final int w = bimg.getWidth();
+      final int h = bimg.getHeight();
       pageFrame.setSize(w, h);
 
       /*
@@ -153,7 +161,8 @@ public enum ExportFormat {
       final ImageWriter writer = writers.next();
 
       /*
-       * Once an ImageWriter has been obtained, its destination must be set to an ImageOutputStream:
+       * Once an ImageWriter has been obtained, its destination must be set to
+       * an ImageOutputStream:
        */
       final File f = new File(fileName);
       final ImageOutputStream ios = ImageIO.createImageOutputStream(f);
@@ -168,7 +177,7 @@ public enum ExportFormat {
       final Color saveColor = big2d.getColor();
       big2d.fillRect(0, 0, w, h);
       big2d.setColor(saveColor);
-      viewPanel.paintComponentOffScreen(big2d);
+      big2d.drawImage(bimg, 0, 0, null);
       writer.write(bi);
 
       ios.close();
@@ -191,11 +200,11 @@ public enum ExportFormat {
 
   /**
    * Constructor
-   * 
+   *
    * @param descr
    *          A descriptive string of the file format.
    */
-  private ExportFormat(final String descr) {
+  private ImageExportFormat(final String descr) {
     description = descr;
   }
 
@@ -209,25 +218,22 @@ public enum ExportFormat {
 
   /**
    * Export the fractal set image contained in the given
-   * {@link agabrown.fractalexplorer.gui.ImageViewingPanel} to the file format in question.
-   * 
-   * @param viewPanel
-   *          The ImageViewingPanel that contains the Fractal set image for export.
+   * {@link agabrown.fractalexplorer.gui.ImageViewingPanel} to the file format
+   * in question.
+   *
+   * @param bimg
+   *          The Fractal image for export.
    * @param fileName
    *          Name of the output file.
-   * @param w
-   *          Width of the plot in device units.
-   * @param h
-   *          Height of the plot in device units.
    * @throws Exception
-   *           In case there is a problem creating or writing to the output file.
+   *           In case there is a problem creating or writing to the output
+   *           file.
    */
-  public abstract void export(final ImageViewingPanel viewPanel, final String fileName, final int w, final int h)
-      throws Exception;
+  public abstract void export(final BufferedImage bimg, final String fileName) throws Exception;
 
   /**
    * Obtain the filename extension for this format.
-   * 
+   *
    * @return The filename extension string.
    */
   public abstract String extension();

@@ -20,26 +20,29 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.apache.commons.math3.complex.Complex;
+
 import agabrown.fractalexplorer.colours.ColourLuts;
 import agabrown.fractalexplorer.colours.ImageScaling;
 import agabrown.fractalexplorer.dm.ComplexPlaneView;
-import agabrown.fractalexplorer.sets.FractalSet;
-import agabrown.fractalexplorer.sets.JuliaSet;
-import agabrown.fractalexplorer.sets.MandelbrotSet;
-import agabrown.fractalexplorer.sets.TricornSet;
+import agabrown.fractalexplorer.generators.FractalGenerator;
+import agabrown.fractalexplorer.generators.FractalGeneratorFactory;
+import agabrown.fractalexplorer.generators.JuliaFatouGenerator;
+import agabrown.fractalexplorer.generators.MandelbrotGenerator;
 
 /**
- * GUI for visually exploring Fractal sets.
+ * FractalExplorer GUI which makes use of new classes in the
+ * {@link agabrown.fractalexplorer.generators} package.
  *
- * @author agabrown 21 Jul 2012
+ * @author agabrown Aug 2014
  *
  */
-public class FractalExplorerGui extends JFrame implements KeyListener, MouseListener {
+public final class NewFractalExplorerGui extends JFrame implements KeyListener, MouseListener {
 
   /**
    * Required for serializable classes.
    */
-  private static final long serialVersionUID = -5925852599513426751L;
+  private static final long serialVersionUID = 1984171807859617860L;
 
   /**
    * Default maximum on iterations in calculating whether a point is in the
@@ -50,7 +53,7 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
   /**
    * Holds the fractal set to be explored.
    */
-  private FractalSet fractalSet;
+  private FractalGenerator fractalSet;
 
   /**
    * Holds the Fractal viewing panel.
@@ -133,17 +136,12 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
   /**
    * Holds the MandelBrotSet instance.
    */
-  private final MandelbrotSet mandelbrotSet = new MandelbrotSet();
+  private final MandelbrotGenerator mandelbrot = FractalGeneratorFactory.getMandelbrotEscapeTime();
 
   /**
    * Holds the JuliaSet instance.
    */
-  private JuliaSet juliaSet;
-
-  /**
-   * Holds the TricornSet instance.
-   */
-  private TricornSet tricornSet;
+  private JuliaFatouGenerator julia;
 
   /**
    * Holds the InfoLayerUI instance.
@@ -174,21 +172,25 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
    * run on the Linux console.
    * </p>
    */
-  public FractalExplorerGui() {
+  public NewFractalExplorerGui() {
     super("FractalExplorer");
 
-    final SplashScreen splash = new SplashScreen(3000);
-    splash.showSplash();
-
     selectLookAndFeel();
-    fractalSet = mandelbrotSet;
+    fractalSet = mandelbrot;
     imWidth = GRAPHICS_DEVICE.getDefaultConfiguration().getBounds().width;
     imHeight = GRAPHICS_DEVICE.getDefaultConfiguration().getBounds().height;
     initializeFields();
     addComponentsToFrame();
     setUndecorated(true);
+    // final boolean isFullScreen = GRAPHICS_DEVICE.isFullScreenSupported();
+    // setUndecorated(isFullScreen);
+    // if (isFullScreen) {
+    // GRAPHICS_DEVICE.setFullScreenWindow(this);
+    // validate();
+    // } else {
     pack();
     setSize(new Dimension(imWidth, imHeight));
+    // }
     setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
   }
 
@@ -199,7 +201,9 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
    *          Command line arguments.
    */
   public static void main(final String[] args) {
-    final FractalExplorerGui fractalExplorer = new FractalExplorerGui();
+    new SplashScreen(3000).showSplash();
+
+    final NewFractalExplorerGui fractalExplorer = new NewFractalExplorerGui();
     SwingUtilities.invokeLater(new Runnable() {
       @Override
       public void run() {
@@ -235,7 +239,7 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
    *
    * @return The reference to the FractalSet instance used by the explorer.
    */
-  protected FractalSet getFractalSet() {
+  protected FractalGenerator getFractalSet() {
     return fractalSet;
   }
 
@@ -370,23 +374,10 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
   }
 
   /**
-   * Calculate the fractal set by using the algorithm implemented in instances
-   * of {@link agabrown.fractalexplorer.sets.FractalSet}.
+   * Calculate the fractal image.
    */
   private void calculateFractalSet() {
-    int i, j;
-    double x, y;
-    for (int k = 0; k < imWidth * imHeight; k++) {
-      i = k % imWidth;
-      j = k / imWidth;
-      x = activeCpv.getValueAtRealPixel(i);
-      y = activeCpv.getValueAtImaginaryPixel(j);
-      if (blackAndWhite) {
-        fractalImage[k] = fractalSet.isPointInSet(x, y, maxIterations) ? 1.0 : 0.0;
-      } else {
-        fractalImage[k] = fractalSet.numberOfIterationsForPoint(x, y, maxIterations);
-      }
-    }
+    fractalImage = fractalSet.generateImage(activeCpv);
   }
 
   /**
@@ -495,7 +486,6 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
         break;
       case KeyEvent.VK_I:
         infoVisible = !infoVisible;
-        infoLayerUI.setVisible(infoVisible);
         this.repaint();
         break;
       case KeyEvent.VK_H:
@@ -515,13 +505,14 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
         showJuliaSet = !showJuliaSet;
         if (showJuliaSet) {
           mandelbrotCpv = (ComplexPlaneView) activeCpv.clone();
-          juliaSet = new JuliaSet(activeCpv.getCentreReal(), activeCpv.getCentreImaginary());
+          julia = FractalGeneratorFactory.getJuliaClassicEscapeTime(Complex.valueOf(activeCpv.getCentreReal(),
+              activeCpv.getCentreImaginary()));
           activeCpv.reset();
           activeCpv.setCentre(0.0, 0.0);
-          fractalSet = juliaSet;
+          fractalSet = julia;
         } else {
           activeCpv = mandelbrotCpv;
-          fractalSet = mandelbrotSet;
+          fractalSet = mandelbrot;
         }
         showFractal();
         break;
@@ -532,11 +523,10 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
         showTricornSet = !showTricornSet;
         if (showTricornSet) {
           mandelbrotCpv = (ComplexPlaneView) activeCpv.clone();
-          tricornSet = new TricornSet();
-          fractalSet = tricornSet;
+          mandelbrot.useConjugate(true);
         } else {
           activeCpv = mandelbrotCpv;
-          fractalSet = mandelbrotSet;
+          mandelbrot.useConjugate(false);
         }
         showFractal();
         break;

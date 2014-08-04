@@ -2,7 +2,7 @@ package agabrown.fractalexplorer.generators;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.UnaryOperator;
+import java.util.function.Function;
 
 import org.apache.commons.math3.complex.Complex;
 
@@ -30,7 +30,7 @@ public final class ComplexFunctionIterator {
   /**
    * Function to be iterated.
    */
-  private UnaryOperator<Complex> function;
+  private Function<Complex, Complex> function;
 
   /**
    * Private default constructor to enforce use of factory method for getting
@@ -50,7 +50,7 @@ public final class ComplexFunctionIterator {
    * @param f
    *          Function to iterate.
    */
-  public static ComplexFunctionIterator getInstance(final int maxIter, final double r, final UnaryOperator<Complex> f) {
+  public static ComplexFunctionIterator getInstance(final int maxIter, final double r, final Function<Complex, Complex> f) {
     final ComplexFunctionIterator cfi = new ComplexFunctionIterator();
     cfi.setMaximumIterations(maxIter);
     cfi.setStoppingRadius(r);
@@ -94,7 +94,7 @@ public final class ComplexFunctionIterator {
    * @param f
    *          Function to be iterated (as Java8 Lambda expression).
    */
-  public void setFunction(final UnaryOperator<Complex> f) {
+  public void setFunction(final Function<Complex, Complex> f) {
     function = f;
   }
 

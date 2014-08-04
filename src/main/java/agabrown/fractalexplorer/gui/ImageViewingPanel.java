@@ -196,4 +196,8 @@ public final class ImageViewingPanel extends JPanel {
     g2.drawImage(bimg, 0, 0, null);
   }
 
+  public BufferedImage getBufferedImage() {
+    return bimg;
+  }
+
 }

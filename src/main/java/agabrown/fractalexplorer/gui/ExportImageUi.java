@@ -7,6 +7,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -18,27 +19,24 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import agabrown.fractalexplorer.util.ExportFormat;
 import agabrown.fractalexplorer.util.FEConstants;
+import agabrown.fractalexplorer.util.ImageExportFormat;
 
 /**
  * Export the plot in the FractalExplorerGui to a file in a user-chosen format
  * (such as postscript, jpeg, pdf, svg etc). Fire up a GUI to take user input.
- * 
+ *
  * <pre>
  * Code cribbed from agabplot project.
  * </pre>
- * 
+ *
  * @author Anthony Brown Jul 2012
- * 
+ *
  */
 public class ExportImageUi extends JFrame implements ActionListener {
 
   /** required for any serializable class */
   public static final long serialVersionUID = 323157L;
-
-  /** FractalExplorerGui which 'owns' the ExportImageUi instance */
-  private final FractalExplorerGui explorer;
 
   /** Directory in which the file of the exported plot is to be stored */
   private String targetDir;
@@ -53,14 +51,19 @@ public class ExportImageUi extends JFrame implements ActionListener {
   private final String comboBoxActionCommand;
 
   /**
-   * stores the ExportFormat enum to be used for the exported image.
+   * stores the ImageExportFormat enum to be used for the exported image.
    */
-  private ExportFormat theFileType;
+  private ImageExportFormat theFileType;
 
   /**
    * Reference to the JComboBox used for selecting export file formats.
    */
-  private final JComboBox<ExportFormat> fileFormatBox;
+  private final JComboBox<ImageExportFormat> fileFormatBox;
+
+  /**
+   * Holds buffered image to be exported.
+   */
+  private final BufferedImage bimg;
 
   /**
    * Defines the action commands associated with this GUI element.
@@ -82,7 +85,7 @@ public class ExportImageUi extends JFrame implements ActionListener {
 
     /**
      * Constructor.
-     * 
+     *
      * @param tip
      *          Tooltip for this command.
      * @param command
@@ -96,29 +99,30 @@ public class ExportImageUi extends JFrame implements ActionListener {
 
   /**
    * Create the GUI and show it to the user.
-   * 
-   * @param feGui
-   *          Fractal Explorer GUI which is the parent of the export-image GUI.
+   *
+   * @param image
+   *          The image to be exported.
    */
-  protected ExportImageUi(final FractalExplorerGui feGui) {
+  protected ExportImageUi(final BufferedImage image) {
 
     super("Export image to file");
 
-    explorer = feGui;
+    bimg = image;
 
     final JPanel buttonsPanel = createButtonsPanel();
 
     targetDir = System.getProperty("user.dir");
-    final String initFileName = targetDir + "/" + FEConstants.PROJECT_NAME + "-image." + ExportFormat.PNG.extension();
+    final String initFileName = targetDir + "/" + FEConstants.PROJECT_NAME + "-image."
+        + ImageExportFormat.PNG.extension();
 
     final Box fileSelect = new Box(BoxLayout.Y_AXIS);
     fileSelect.setBorder(BorderFactory.createTitledBorder("Image file name"));
     whichFile = new JTextField(initFileName, 40);
     fileSelect.add(whichFile);
 
-    fileFormatBox = new JComboBox<ExportFormat>(ExportFormat.values());
-    fileFormatBox.setSelectedItem(ExportFormat.PNG);
-    theFileType = (ExportFormat) fileFormatBox.getSelectedItem();
+    fileFormatBox = new JComboBox<ImageExportFormat>(ImageExportFormat.values());
+    fileFormatBox.setSelectedItem(ImageExportFormat.PNG);
+    theFileType = (ImageExportFormat) fileFormatBox.getSelectedItem();
     fileFormatBox.addActionListener(this);
     fileFormatBox.setToolTipText("Select the file format here");
 
@@ -145,7 +149,7 @@ public class ExportImageUi extends JFrame implements ActionListener {
 
   /**
    * Create the JPanel with the clickable buttons for the image export GUI.
-   * 
+   *
    * @return A JPanel instance with the buttons defined.
    */
   protected JPanel createButtonsPanel() {
@@ -170,7 +174,7 @@ public class ExportImageUi extends JFrame implements ActionListener {
 
   /**
    * Handle received ActionEvents
-   * 
+   *
    * @param actionEvent
    *          ActionEvent object
    */
@@ -194,7 +198,7 @@ public class ExportImageUi extends JFrame implements ActionListener {
     }
 
     if (command.equals(comboBoxActionCommand)) {
-      theFileType = (ExportFormat) fileFormatBox.getSelectedItem();
+      theFileType = (ImageExportFormat) fileFormatBox.getSelectedItem();
       outFileName = targetDir + "/" + FEConstants.PROJECT_NAME + "-image." + theFileType.extension();
       whichFile.setText(outFileName);
     }
@@ -202,7 +206,7 @@ public class ExportImageUi extends JFrame implements ActionListener {
     if (command.equals(ActionCommands.SAVE.command)) {
       outFileName = whichFile.getText();
       try {
-        theFileType.export(explorer.getViewPanel(), outFileName, explorer.getWidth(), explorer.getHeight());
+        theFileType.export(bimg, outFileName);
       } catch (final Exception e) {
         e.printStackTrace();
       }
