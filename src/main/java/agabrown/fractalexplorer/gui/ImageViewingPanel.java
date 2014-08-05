@@ -121,6 +121,10 @@ public final class ImageViewingPanel extends JPanel {
    */
   public void setReverseColourLut(final boolean rev) {
     reverseLut = rev;
+    if (image != null) {
+      createBufferedImage();
+      repaint();
+    }
   }
 
   /**
@@ -196,6 +200,11 @@ public final class ImageViewingPanel extends JPanel {
     g2.drawImage(bimg, 0, 0, null);
   }
 
+  /**
+   * Obtain a copy of the buffered image maintained by this class.
+   *
+   * @return The buffered image for display.
+   */
   public BufferedImage getBufferedImage() {
     return bimg;
   }

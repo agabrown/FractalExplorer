@@ -1,7 +1,6 @@
 package agabrown.fractalexplorer.generators;
 
 import agabrown.fractalexplorer.colours.ColouringAlgorithm;
-import agabrown.fractalexplorer.dm.ComplexPlaneView;
 
 /**
  * Base class for fractal generating classes that are based on complex dynamics
@@ -11,7 +10,7 @@ import agabrown.fractalexplorer.dm.ComplexPlaneView;
  * @author agabrown Aug 2014.
  *
  */
-public abstract class ComplexDynamicsBased implements FractalGenerator {
+public abstract class ComplexDynamicsBased extends AbstractFractalGenerator {
 
   /**
    * The algorithm used for assigning values to the pixels of the Fractal image.
@@ -28,16 +27,6 @@ public abstract class ComplexDynamicsBased implements FractalGenerator {
    * = f(conjugate(z<sub>n</sub>))).
    */
   protected boolean iterateConjugate = false;
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see
-   * agabrown.fractalexplorer.generators.FractalGenerator#generateImage(agabrown
-   * .fractalexplorer.dm.ComplexPlaneView)
-   */
-  @Override
-  public abstract double[] generateImage(final ComplexPlaneView cpv);
 
   /**
    * Set whether or not to iterate the generating function over conjugate(z)

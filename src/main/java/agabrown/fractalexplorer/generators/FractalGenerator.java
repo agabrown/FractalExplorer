@@ -2,6 +2,8 @@ package agabrown.fractalexplorer.generators;
 
 import java.util.List;
 
+import org.apache.commons.math3.complex.Complex;
+
 import agabrown.fractalexplorer.dm.ComplexPlaneView;
 
 /**
@@ -24,6 +26,17 @@ public interface FractalGenerator {
    *         displaying).
    */
   public double[] generateImage(ComplexPlaneView cpv);
+
+  /**
+   * Generate the value of the Fractal Image pixel for the specified point in
+   * the complex plane.
+   *
+   * @param z
+   *          Point in complex plane at which to generate pixel value.
+   * @return The pixel value (which is to be scaled and colour coded before
+   *         displaying).
+   */
+  public double generatePixelValue(Complex z);
 
   /**
    * Obtain a string containing the name of the fractal generator.

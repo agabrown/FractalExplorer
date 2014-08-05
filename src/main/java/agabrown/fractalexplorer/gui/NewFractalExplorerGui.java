@@ -9,13 +9,14 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLayer;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -37,7 +38,7 @@ import agabrown.fractalexplorer.generators.MandelbrotGenerator;
  * @author agabrown Aug 2014
  *
  */
-public final class NewFractalExplorerGui extends JFrame implements KeyListener, MouseListener {
+public final class NewFractalExplorerGui extends JFrame implements KeyListener, MouseListener, PropertyChangeListener {
 
   /**
    * Required for serializable classes.
@@ -92,10 +93,9 @@ public final class NewFractalExplorerGui extends JFrame implements KeyListener, 
   private ComplexPlaneView mandelbrotCpv;
 
   /**
-   * If true depict the fractal set in black (point in set) and white (point not
-   * in set) only.
+   * If true use logarithmic scaling of the images. Linear otherwise.
    */
-  private boolean blackAndWhite;
+  private boolean logScaling;
 
   /**
    * If true the fractal info layer is visible.
@@ -153,6 +153,12 @@ public final class NewFractalExplorerGui extends JFrame implements KeyListener, 
    * view and the zoom factor.
    */
   private CenterPointForm cpvForm;
+
+  /**
+   * Holds the instance of the SwingWorker that invokes the calculation of the
+   * Fractal image.
+   */
+  private FractalCalculationTask fcTask;
 
   /**
    * Holds the instance of the GraphicsDevice which the FractalExplorer is
@@ -312,7 +318,7 @@ public final class NewFractalExplorerGui extends JFrame implements KeyListener, 
     activeCpv = new ComplexPlaneView(imWidth, imHeight);
     mandelbrotCpv = (ComplexPlaneView) activeCpv.clone();
     cpvForm = new CenterPointForm();
-    blackAndWhite = true;
+    logScaling = true;
     infoVisible = true;
     helpVisible = false;
     showJuliaSet = false;
@@ -326,7 +332,7 @@ public final class NewFractalExplorerGui extends JFrame implements KeyListener, 
    */
   private void addComponentsToFrame() {
     viewingPanel = new ImageViewingPanel();
-    viewingPanel.setImageScaling(ImageScaling.LINEAR);
+    viewingPanel.setImageScaling(ImageScaling.LOGARITHMIC);
     viewingPanel.setColourLut(ColourLuts.GREYSCALE);
     viewingPanel.setReverseColourLut(reverseLut);
     viewingPanel.setFocusable(true);
@@ -366,18 +372,15 @@ public final class NewFractalExplorerGui extends JFrame implements KeyListener, 
    * {@link ImageViewingPanel}.
    */
   private void showFractal() {
-    final Instant start = Instant.now();
     calculateFractalSet();
-    final Instant stop = Instant.now();
-    System.out.println(ChronoUnit.MILLIS.between(start, stop));
-    viewingPanel.setImage(fractalImage, imWidth, imHeight);
   }
 
   /**
    * Calculate the fractal image.
    */
   private void calculateFractalSet() {
-    fractalImage = fractalSet.generateImage(activeCpv);
+    fcTask = new FractalCalculationTask(this, fractalSet, activeCpv);
+    fcTask.calculateFractalImage();
   }
 
   /**
@@ -417,35 +420,25 @@ public final class NewFractalExplorerGui extends JFrame implements KeyListener, 
       case KeyEvent.VK_ESCAPE:
         System.exit(0);
         break;
-      case KeyEvent.VK_C:
-        blackAndWhite = !blackAndWhite;
-        if (blackAndWhite) {
-          viewingPanel.setImageScaling(ImageScaling.LINEAR);
-          viewingPanel.setReverseColourLut(reverseLut);
-          viewingPanel.setColourLut(ColourLuts.GREYSCALE);
-        } else {
+      case KeyEvent.VK_L:
+        logScaling = !logScaling;
+        if (logScaling) {
           viewingPanel.setImageScaling(ImageScaling.LOGARITHMIC);
-          viewingPanel.setReverseColourLut(reverseLut);
-          viewingPanel.setColourLut(COLOUR_LUTS[lutIndex]);
+        } else {
+          viewingPanel.setImageScaling(ImageScaling.LINEAR);
         }
-        showFractal();
         break;
       case KeyEvent.VK_D:
         reverseLut = !reverseLut;
         viewingPanel.setReverseColourLut(reverseLut);
-        showFractal();
         break;
       case KeyEvent.VK_PAGE_DOWN:
         lutIndex = Math.min(lutIndex + 1, COLOUR_LUTS.length - 1);
-        if (!blackAndWhite) {
-          viewingPanel.setColourLut(COLOUR_LUTS[lutIndex]);
-        }
+        viewingPanel.setColourLut(COLOUR_LUTS[lutIndex]);
         break;
       case KeyEvent.VK_PAGE_UP:
         lutIndex = Math.max(0, lutIndex - 1);
-        if (!blackAndWhite) {
-          viewingPanel.setColourLut(COLOUR_LUTS[lutIndex]);
-        }
+        viewingPanel.setColourLut(COLOUR_LUTS[lutIndex]);
         break;
       case KeyEvent.VK_1:
         maxIterations = 256;
@@ -486,6 +479,7 @@ public final class NewFractalExplorerGui extends JFrame implements KeyListener, 
         break;
       case KeyEvent.VK_I:
         infoVisible = !infoVisible;
+        infoLayerUI.setVisible(infoVisible);
         this.repaint();
         break;
       case KeyEvent.VK_H:
@@ -564,6 +558,14 @@ public final class NewFractalExplorerGui extends JFrame implements KeyListener, 
 
   @Override
   public void mouseExited(final MouseEvent e) {
+  }
+
+  @Override
+  public void propertyChange(final PropertyChangeEvent evt) {
+    if (SwingWorker.StateValue.DONE.equals(evt.getNewValue())) {
+      fractalImage = fcTask.getFractalImage();
+      viewingPanel.setImage(fractalImage, imWidth, imHeight);
+    }
   }
 
 }

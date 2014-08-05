@@ -7,7 +7,6 @@ import java.util.function.Function;
 import org.apache.commons.math3.complex.Complex;
 
 import agabrown.fractalexplorer.colours.ColouringAlgorithm;
-import agabrown.fractalexplorer.dm.ComplexPlaneView;
 
 /**
  * This class implements a general version of the Mandelbrot fractal image
@@ -123,38 +122,17 @@ public final class MandelbrotGenerator extends ComplexDynamicsBased {
         builder.generatingFunction);
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see
-   * agabrown.fractalexplorer.generators.FractalGenerator#generateImage(agabrown
-   * .fractalexplorer.dm.ComplexPlaneView)
-   */
   @Override
-  public double[] generateImage(final ComplexPlaneView cpv) {
-    int i, j;
-    double x, y;
-    final int imWidth = cpv.getSizeRealPixels();
-    final int imHeight = cpv.getSizeImaginaryPixels();
-    final double[] fractalImage = new double[imWidth * imHeight];
+  public double generatePixelValue(final Complex z) {
     final Complex zStart = Complex.ZERO;
-
     List<Complex> iterates;
-    for (int k = 0; k < imWidth * imHeight; k++) {
-      i = k % imWidth;
-      j = k / imWidth;
-      x = cpv.getValueAtRealPixel(i);
-      y = cpv.getValueAtImaginaryPixel(j);
-      final Complex c = Complex.valueOf(x, y);
-      theIterator.setFunction(baseGeneratingFunction.andThen(z -> z.add(c)));
-      if (iterateConjugate) {
-        iterates = theIterator.iterateConjugate(zStart);
-      } else {
-        iterates = theIterator.iterate(zStart);
-      }
-      fractalImage[k] = colouringAlgorithm.getPixelValue(iterates);
+    theIterator.setFunction(baseGeneratingFunction.andThen(y -> y.add(z)));
+    if (iterateConjugate) {
+      iterates = theIterator.iterateConjugate(zStart);
+    } else {
+      iterates = theIterator.iterate(zStart);
     }
-    return fractalImage;
+    return colouringAlgorithm.getPixelValue(iterates);
   }
 
   @Override
