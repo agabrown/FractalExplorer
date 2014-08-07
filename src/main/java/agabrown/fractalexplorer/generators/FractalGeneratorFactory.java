@@ -38,6 +38,35 @@ public final class FractalGeneratorFactory {
   }
 
   /**
+   * Creates the modified Mandelbrot fractal generator using the escape time
+   * algorithm for colouring.
+   *
+   * @return A pre-configured version of ModifiedMandelbrotGenerator.
+   */
+  public static ModifiedMandelbrotGenerator getModifiedMandelbrotEscapeTime() {
+    final Function<Complex, Complex> f = z -> z.multiply(z);
+    final ModifiedMandelbrotGenerator result = new ModifiedMandelbrotGenerator.Builder()
+        .colouringAlgorithm(new EscapeTime()).maximumIterations(DEFAULT_ITERATIONS)
+    .stoppingRadius(DEFAULT_STOPPING_RADIUS).generatingFunction(f).build();
+    return result;
+  }
+
+  /**
+   * Creates the modified Mandelbrot fractal generator using the escape time
+   * algorithm for colouring.
+   *
+   * @return A pre-configured version of ModifiedMandelbrotGenerator.
+   */
+  public static ModifiedMandelbrotGenerator getRudyCubicMandelbrotEscapeTime() {
+    final Complex d = Complex.valueOf(-0.7198, 0.9111);
+    final Function<Complex, Complex> f = z -> z.multiply(z).multiply(z).add(z.multiply(d));
+    final ModifiedMandelbrotGenerator result = new ModifiedMandelbrotGenerator.Builder()
+        .colouringAlgorithm(new EscapeTime()).maximumIterations(DEFAULT_ITERATIONS).stoppingRadius(1.0e10)
+    .generatingFunction(f).build();
+    return result;
+  }
+
+  /**
    * Creates the classic Julia fractal generator using the escape time algorithm
    * for colouring. The function f(z)=z*z+mu is iterated.
    *

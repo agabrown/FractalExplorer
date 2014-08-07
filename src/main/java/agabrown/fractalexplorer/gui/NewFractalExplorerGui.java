@@ -26,10 +26,9 @@ import org.apache.commons.math3.complex.Complex;
 import agabrown.fractalexplorer.colours.ColourLuts;
 import agabrown.fractalexplorer.colours.ImageScaling;
 import agabrown.fractalexplorer.dm.ComplexPlaneView;
+import agabrown.fractalexplorer.generators.ComplexDynamicsBased;
 import agabrown.fractalexplorer.generators.FractalGenerator;
 import agabrown.fractalexplorer.generators.FractalGeneratorFactory;
-import agabrown.fractalexplorer.generators.JuliaFatouGenerator;
-import agabrown.fractalexplorer.generators.MandelbrotGenerator;
 
 /**
  * FractalExplorer GUI which makes use of new classes in the
@@ -136,12 +135,12 @@ public final class NewFractalExplorerGui extends JFrame implements KeyListener, 
   /**
    * Holds the MandelBrotSet instance.
    */
-  private final MandelbrotGenerator mandelbrot = FractalGeneratorFactory.getMandelbrotEscapeTime();
+  private final ComplexDynamicsBased mandelbrot = FractalGeneratorFactory.getMandelbrotEscapeTime();
 
   /**
    * Holds the JuliaSet instance.
    */
-  private JuliaFatouGenerator julia;
+  private ComplexDynamicsBased julia;
 
   /**
    * Holds the InfoLayerUI instance.

@@ -50,7 +50,8 @@ public final class ComplexFunctionIterator {
    * @param f
    *          Function to iterate.
    */
-  public static ComplexFunctionIterator getInstance(final int maxIter, final double r, final Function<Complex, Complex> f) {
+  public static ComplexFunctionIterator getInstance(final int maxIter, final double r,
+      final Function<Complex, Complex> f) {
     final ComplexFunctionIterator cfi = new ComplexFunctionIterator();
     cfi.setMaximumIterations(maxIter);
     cfi.setStoppingRadius(r);
@@ -105,15 +106,17 @@ public final class ComplexFunctionIterator {
    * @param zStart
    *          Starting value of z.
    *
-   * @return List of iterates f<sup>n</sup>(z).
+   * @return List of iterates f<sup>n</sup>(z) (includes N iterates plus the
+   *         starting value).
    */
   public List<Complex> iterate(final Complex zStart) {
     final ArrayList<Complex> zn = new ArrayList<>();
     Complex zNext = Complex.valueOf(zStart.getReal(), zStart.getImaginary());
+    zn.add(zNext);
     int iter = 0;
     while (zNext.abs() <= stoppingRadius && iter < maximumIterations) {
-      zn.add(zNext);
       zNext = function.apply(zNext);
+      zn.add(zNext);
       iter++;
     }
     zn.trimToSize();
@@ -132,10 +135,11 @@ public final class ComplexFunctionIterator {
   public List<Complex> iterateConjugate(final Complex zStart) {
     final ArrayList<Complex> zn = new ArrayList<>();
     Complex zNext = Complex.valueOf(zStart.getReal(), zStart.getImaginary());
+    zn.add(zNext);
     int iter = 0;
     while (zNext.abs() <= stoppingRadius && iter < maximumIterations) {
-      zn.add(zNext);
       zNext = function.apply(zNext.conjugate());
+      zn.add(zNext);
       iter++;
     }
     zn.trimToSize();

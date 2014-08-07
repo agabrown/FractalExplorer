@@ -37,14 +37,16 @@ public class ComplexFunctionIteratorTest {
    */
   @Test
   public void testIterate() {
-    cfi = ComplexFunctionIterator.getInstance(10, 2.0, z -> z);
+    int nmax = 10;
+    final double bailoutValue = 2.0;
+    cfi = ComplexFunctionIterator.getInstance(nmax, bailoutValue, z -> z);
     zStart = Complex.valueOf(2.1, 0.0);
     result = cfi.iterate(zStart);
-    assertEquals(0, result.size());
+    assertEquals(1, result.size());
 
     zStart = Complex.valueOf(2.0, 0.0);
     result = cfi.iterate(zStart);
-    assertEquals(10, result.size());
+    assertEquals(nmax + 1, result.size());
     for (final Complex z : result) {
       assertTrue(Complex.equals(z, zStart, 1.0e-8));
     }
@@ -52,13 +54,17 @@ public class ComplexFunctionIteratorTest {
     cfi.setFunction(z -> z.multiply(z).add(Complex.valueOf(0.1, 0.1)));
     zStart = Complex.ZERO;
     result = cfi.iterate(zStart);
-    assertEquals(10, result.size());
-    cfi.setMaximumIterations(5000);
+    assertEquals(nmax + 1, result.size());
+    nmax = 5000;
+    cfi.setMaximumIterations(nmax);
     result = cfi.iterate(zStart);
-    assertEquals(5000, result.size());
+    assertEquals(nmax + 1, result.size());
+    assertTrue(result.get(result.size() - 2).abs() <= bailoutValue);
 
     cfi.setFunction(z -> z.multiply(z).add(Complex.valueOf(-0.78, 0.20)));
     result = cfi.iterate(zStart);
-    assertTrue(result.size() < 5000);
+    assertTrue(result.size() < nmax + 1);
+    assertTrue(result.get(result.size() - 2).abs() <= bailoutValue);
+    assertTrue(result.get(result.size() - 1).abs() > bailoutValue);
   }
 }
