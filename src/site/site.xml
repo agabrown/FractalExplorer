@@ -20,14 +20,14 @@
     <version position="left"/>
     <poweredBy>
         <logo name="Maven" href="http://maven.apache.org/"
-          img="http://maven.apache.org/images/logos/maven-feather.png"/>
+              img="http://maven.apache.org/images/logos/maven-feather.png"/>
     </poweredBy>
     <bannerRight>
         <name>FractalExplorer</name>
     </bannerRight>
     <body>
         <menu name="FractalExplorer">
-            <item name="Overview" href="/index.html" />
+            <item name="Overview" href="/index.html"/>
             <!--  
             <item name="Project Structure" href="/project-structure.html" />
             <item name="The Team" href="/team-list.html" />
@@ -36,6 +36,6 @@
             <item name="Source Repository" href="source-repository.html" />
              -->
         </menu>
-        <menu ref="reports" />
-  </body>
+        <menu ref="reports"/>
+    </body>
 </project>

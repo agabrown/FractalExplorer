@@ -6,6 +6,10 @@
 #############
 *.jar
 
+# IntelliJ project files#
+#########################
+.idea/
+
 # folders generated on the fly #
 ################################
 

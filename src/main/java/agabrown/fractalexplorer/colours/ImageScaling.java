@@ -12,7 +12,7 @@ import java.util.Arrays;
  *   Code cribbed from agabplot package.
  * </pre>
  * 
- * @author Anthony Brown Jul 2012
+ * @author Anthony Brown Jul 2012 - Sep 2021
  */
 public enum ImageScaling {
 
@@ -92,7 +92,7 @@ public enum ImageScaling {
   /**
    * Descriptive string for enum.
    */
-  private String label;
+  private final String label;
 
   /**
    * Constructor.
