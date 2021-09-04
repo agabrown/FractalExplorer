@@ -1,14 +1,8 @@
 # FractalExplorer
 
 A fractal viewer implemented in Java. Written mainly for my own entertainment and inspired by the Fractile Plus app
-[Fractile Plus app](http://fractile.net) (with no pretence of getting even close to the performance and smooth feel of
-Fractile Plus!).
-
-## Author
-
-Anthony G.A. Brown
-agabrown at xs4all.nl
-2012--2021
+[Fractile Plus app](https://fractilefractals.wordpress.com/) (with no pretence of getting even close to the performance and
+smooth feel of Fractile Plus!).
 
 ## Requirements
 
