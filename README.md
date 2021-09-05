@@ -14,11 +14,15 @@ TBD
 
 ## Running FractalExplorer
 
+Build the executable jar (including all dependencies) with `./gradlew shadowJar`. The jar file will be located in
+`build/libs`.
+
 One can run the explorer as follows:
 
-- Java: "java -jar folder-with-jar/FractalExplorer-version-jar-with-dependencies.jar"
-- Bash: using the example bash script in the "scripts" folder.
-- ... (your favoured method here)
+* Java: "java -jar folder-with-jar/FractalExplorer-version-jar-with-dependencies.jar"
+* Bash: using the example bash script in the "scripts" folder.
+* Using the gradle generated distribution files in `build/distributions`
+* ... (your favoured method here)
 
 ## Limitations (or features, depending on your point of view) of FractalExplorer
 
