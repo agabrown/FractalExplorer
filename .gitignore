@@ -1,17 +1,13 @@
-# Compiled source #
-###################
+# Compiled source
 *.class
 
-# jar files #
-#############
+# jar files
 *.jar
 
-# IntelliJ project files#
-#########################
+# IntelliJ project files
 .idea/
 
-# folders generated on the fly #
-################################
+# Maven
 
 .settings/
 build/
@@ -20,3 +16,17 @@ buildreport/
 dist/
 /target/
 /on_fractal_coloring_techniques(lo-res).pdf
+
+.gradle
+**/build/
+!src/**/build/
+gradle/
+gradlew
+gradlew.bat
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Cache of project
+.gradletasknamecache
+

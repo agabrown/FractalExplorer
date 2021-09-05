@@ -3,13 +3,13 @@
 # Shell script for invoking FractalExplorer GUI
 #
 # Created:     25.07.2012
-# Last Update: 25.07.2012
+# Last Update: 05.09.2021
 #
 # Author: Anthony Brown
 #
 
 # To get Java GUIs to work in DWM either use Java 7 or use "setwmname LG3D"
 
-CUSTOM_CLASSPATH="$HOME/JDE/FractalExplorer/FractalExplorer.jar"
+CUSTOM_CLASSPATH="$HOME/JClassLibs/FractalExplorer/FractalExplorer.jar"
 
 exec "$JAVA_HOME/bin/java" -classpath "$CUSTOM_CLASSPATH" agabrown.fractalexplorer.gui.FractalExplorerGui $@ &

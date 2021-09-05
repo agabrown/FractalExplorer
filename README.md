@@ -4,17 +4,13 @@ A fractal viewer implemented in Java. Written mainly for my own entertainment an
 [Fractile Plus app](https://fractilefractals.wordpress.com/) (with no pretence of getting even close to the performance and
 smooth feel of Fractile Plus!).
 
-## Requirements
+## Build and dependencies
 
-Dependencies are managed through Maven (http://maven.apache.org/)
-
-## Building the project
-
-Use "mvn package" from the command line.
+Build/execution is managed with Gradle.
 
 ## Documentation
 
-Javadocs can be generated with "mvn site" and then read using a browser (find the "site" folder in "target").
+TBD
 
 ## Running FractalExplorer
 
