@@ -16,7 +16,7 @@ TBD
 
 One can run the explorer as follows:
 
-- Java: "java -jar target/FractalExplorer-version-jar-with-dependencies.jar"
+- Java: "java -jar folder-with-jar/FractalExplorer-version-jar-with-dependencies.jar"
 - Bash: using the example bash script in the "scripts" folder.
 - ... (your favoured method here)
 
