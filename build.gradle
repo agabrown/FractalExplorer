@@ -25,3 +25,7 @@ group = 'agabrown.fractalexplorer'
 version = '0.7.1'
 description = 'FractalExplorer'
 java.sourceCompatibility = JavaVersion.VERSION_1_8
+
+test {
+    useJUnit()
+}

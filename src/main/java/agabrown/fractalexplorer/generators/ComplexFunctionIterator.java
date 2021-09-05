@@ -7,10 +7,9 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
- * Implements a complex function iterator. This class defines a maximum number
- * of iterations N<sub>max</sub> and a stopping radius R<sub>max</sub>. The
- * iterations f<sup>n</sup>(z) stop if n>N<sub>max</sub> or if
- * |f<sup>n</sup>(z)|>R<sub>max</sub>.
+ * Implements a complex function iterator. This class defines a maximum number of iterations N<sub>max</sub> and a
+ * stopping radius R<sub>max</sub>. The iterations f<sup>n</sup>(z) stop if n&gt;N<sub>max</sub> or if
+ * |f<sup>n</sup>(z)|&gt;R<sub>max</sub>.
  *
  * @author agabrown Aug 2014 - Sep 2021
  */
@@ -32,8 +31,7 @@ public final class ComplexFunctionIterator {
     private Function<Complex, Complex> function;
 
     /**
-     * Private default constructor to enforce use of factory method for getting
-     * instance.
+     * Private default constructor to enforce use of factory method for getting instance.
      */
     private ComplexFunctionIterator() {
 
@@ -45,6 +43,7 @@ public final class ComplexFunctionIterator {
      * @param maxIter Maximum number of iterations.
      * @param r       Stopping radius.
      * @param f       Function to iterate.
+     * @return Instance of ComplexFunctionIterator.
      */
     public static ComplexFunctionIterator getInstance(final int maxIter, final double r,
                                                       final Function<Complex, Complex> f) {
@@ -59,7 +58,7 @@ public final class ComplexFunctionIterator {
      * Set the maximum number of iterations.
      *
      * @param maxIter Maximum number of iterations.
-     * @throws IllegalArgumentException If maxIter<1.
+     * @throws IllegalArgumentException If maxIter is less than 1.
      */
     public void setMaximumIterations(final int maxIter) {
         if (maxIter < 1) {
@@ -91,12 +90,10 @@ public final class ComplexFunctionIterator {
     }
 
     /**
-     * Iterate the function until one of the stopping criteria is reached and
-     * return the list of iterates.
+     * Iterate the function until one of the stopping criteria is reached and return the list of iterates.
      *
      * @param zStart Starting value of z.
-     * @return List of iterates f<sup>n</sup>(z) (includes N iterates plus the
-     * starting value).
+     * @return List of iterates f<sup>n</sup>(z) (includes N iterates plus the starting value).
      */
     public List<Complex> iterate(final Complex zStart) {
         final ArrayList<Complex> zn = new ArrayList<>();
@@ -113,8 +110,8 @@ public final class ComplexFunctionIterator {
     }
 
     /**
-     * Iterate the function for the complex conjugate of z until one of the
-     * stopping criteria is reached and return the list of iterates.
+     * Iterate the function for the complex conjugate of z until one of the stopping criteria is reached and return the
+     * list of iterates.
      *
      * @param zStart Starting value of z.
      * @return List of iterates f<sup>n</sup>(conjugate(z)).

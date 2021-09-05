@@ -13,9 +13,8 @@ import java.beans.PropertyChangeListener;
 import java.util.concurrent.ExecutionException;
 
 /**
- * This class facilitates doing the fractal calculations in a background thread.
- * The class should be used together with a property change listener method as
- * follows:
+ * This class facilitates doing the fractal calculations in a background thread. The class should be used together with
+ * a property change listener method as follows:
  *
  * <pre>
  * <code>
@@ -24,7 +23,7 @@ import java.util.concurrent.ExecutionException;
  *
  * ...
  *
- * @Override
+ * &#64;Override
  * public void propertyChange(final PropertyChangeEvent evt) {
  *   if (SwingWorker.StateValue.DONE.equals(evt.getNewValue())) {
  *     fractalImage = fcTask.getFractalImage();
@@ -39,14 +38,12 @@ import java.util.concurrent.ExecutionException;
 public final class FractalCalculationTask implements PropertyChangeListener {
 
     /**
-     * Holds the reference to the FractalGenerator instance that calculates the
-     * fractal.
+     * Holds the reference to the FractalGenerator instance that calculates the fractal.
      */
     private final FractalGenerator generator;
 
     /**
-     * Holds the reference to the ComplexPlaneView instance for which the
-     * calculation is to be done.
+     * Holds the reference to the ComplexPlaneView instance for which the calculation is to be done.
      */
     private final ComplexPlaneView theCpv;
 
@@ -70,14 +67,12 @@ public final class FractalCalculationTask implements PropertyChangeListener {
      */
     private double[] fractalImage;
 
-  /**
-     * Create a new Fractal calculation task for a specific Fractal generator and
-     * complex plane view.
+    /**
+     * Create a new Fractal calculation task for a specific Fractal generator and complex plane view.
      *
      * @param owner The class that created this FractalCalculationTask.
      * @param fg    The FractalGenerator instance to use in the calculations.
-     * @param cpv   The ComplexPlaneView instance for which the calculation is to be
-     *              done.
+     * @param cpv   The ComplexPlaneView instance for which the calculation is to be done.
      */
     public FractalCalculationTask(final PropertyChangeListener owner, final FractalGenerator fg,
                                   final ComplexPlaneView cpv) {
@@ -115,21 +110,19 @@ public final class FractalCalculationTask implements PropertyChangeListener {
     }
 
     /**
-     * Invoke this method to start the calculation of the fractal image. Will also
-     * instantiate a progress bar.
+     * Invoke this method to start the calculation of the fractal image. Will also instantiate a progress bar.
      */
     void calculateFractalImage() {
         progressFrame.setVisible(true);
         progressFrame.toFront();
-      Task task = new Task();
+        Task task = new Task();
         task.addPropertyChangeListener(this);
         task.addPropertyChangeListener(taskOwner);
         task.execute();
     }
 
     /**
-     * Use this method to obtain the result (after the SwingWorker is done, see
-     * above).
+     * Use this method to obtain the result (after the SwingWorker is done, see above).
      *
      * @return The fractal image.
      */
