@@ -31,13 +31,12 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
     private static final long serialVersionUID = -5925852599513426751L;
 
     /**
-     * Default maximum on iterations in calculating whether a point is in the
-     * fractal set or not.
+     * Default maximum on iterations in calculating whether a point is in the fractal set or not.
      */
     private static final int DEFAULT_MAX_ITERATIONS = 256;
+
     /**
-     * Holds the instance of the GraphicsDevice which the FractalExplorer is
-     * using.
+     * Holds the instance of the GraphicsDevice which the FractalExplorer is using.
      */
     private static final GraphicsDevice GRAPHICS_DEVICE = GraphicsEnvironment.getLocalGraphicsEnvironment()
             .getDefaultScreenDevice();
@@ -45,92 +44,104 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
      * Width of the image array (length along horizontal screen direction).
      */
     private final int imWidth;
+
     /**
      * Height of the image array (length along vertical screen direction).
      */
     private final int imHeight;
+
     /**
-     * Contains the array of colour LUTs available to be applied to the fractal
-     * image.
+     * Contains the array of colour LUTs available to be applied to the fractal image.
      */
     private final ColourLuts[] COLOUR_LUTS = ColourLuts.toArray();
+
     /**
      * Holds the MandelBrotSet instance.
      */
     private final MandelbrotSet mandelbrotSet = new MandelbrotSet();
+
     /**
      * Holds the InfoLayerUI instance.
      */
     private final InfoLayerUI infoLayerUI = new InfoLayerUI();
+
     /**
      * Holds the fractal set to be explored.
      */
     private FractalSet fractalSet;
+
     /**
      * Holds the Fractal viewing panel.
      */
     private ImageViewingPanel viewingPanel;
+
     /**
      * Holds the Fractal image array pixel values
      */
     private double[] fractalImage;
+
     /**
-     * Maximum number of iterations for calculating whether a point is in the
-     * fractal set or not.
+     * Maximum number of iterations for calculating whether a point is in the fractal set or not.
      */
     private int maxIterations;
+
     /**
      * The current view of the complex plane.
      */
     private ComplexPlaneView activeCpv;
+
     /**
      * Saves the complex plane view for the Mandelbrot set.
      */
     private ComplexPlaneView mandelbrotCpv;
+
     /**
-     * If true depict the fractal set in black (point in set) and white (point not
-     * in set) only.
+     * If true depict the fractal set in black (point in set) and white (point not in set) only.
      */
     private boolean blackAndWhite;
+
     /**
      * If true the fractal info layer is visible.
      */
     private boolean infoVisible;
+
     /**
      * If true the help info layer is visible.
      */
     private boolean helpVisible;
+
     /**
      * True if Julia set should be shown instead of Mandelbrot set.
      */
     private boolean showJuliaSet;
+
     /**
      * True if Tricorn set should be shown instead of Mandelbrot set.
      */
     private boolean showTricornSet;
+
     /**
      * The index of the LUT currently in use.
      */
     private int lutIndex;
+
     /**
      * If true colour scale should be inverted.
      */
     private boolean reverseLut;
+
     /**
-     * Holds the form which can be used to specify the centre of the complex plane
-     * view and the zoom factor.
+     * Holds the form which can be used to specify the centre of the complex plane view and the zoom factor.
      */
     private CenterPointForm cpvForm;
 
     /**
-     * Constructor. Contains code to detect whether full screen mode is
-     * supported in the graphics environment from which FractalExplorer is
-     * invoked.
+     * Constructor. Contains code to detect whether full screen mode is supported in the graphics environment from which
+     * FractalExplorer is invoked.
      *
      * <p>
-     * NOTE: Exits with {@link java.awt.HeadlessException} if the graphics
-     * environment is found to be headless. For example, the programme will not
-     * run on the Linux console.
+     * NOTE: Exits with {@link java.awt.HeadlessException} if the graphics environment is found to be headless. For
+     * example, the programme will not run on the Linux console.
      * </p>
      */
     public FractalExplorerGui() {
@@ -226,8 +237,7 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
     /**
      * Create the fractal information layer for the viewing panel.
      *
-     * @return Instance of JLayer that takes care of presenting the information on
-     * the Fractal Explorer state.
+     * @return Instance of JLayer that takes care of presenting the information on the Fractal Explorer state.
      */
     private JLayer<JComponent> createInfoLayer() {
         final JLayer<JComponent> theInfoLayer = new JLayer<>(viewingPanel, infoLayerUI);
@@ -247,8 +257,7 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
     }
 
     /**
-     * Display the Fractal set by setting the image array in the
-     * {@link ImageViewingPanel}.
+     * Display the Fractal set by setting the image array in the {@link ImageViewingPanel}.
      */
     private void showFractal() {
         final Instant start = Instant.now();
@@ -259,8 +268,8 @@ public class FractalExplorerGui extends JFrame implements KeyListener, MouseList
     }
 
     /**
-     * Calculate the fractal set by using the algorithm implemented in instances
-     * of {@link agabrown.fractalexplorer.sets.FractalSet}.
+     * Calculate the fractal set by using the algorithm implemented in instances of {@link
+     * agabrown.fractalexplorer.sets.FractalSet}.
      */
     private void calculateFractalSet() {
         int i, j;

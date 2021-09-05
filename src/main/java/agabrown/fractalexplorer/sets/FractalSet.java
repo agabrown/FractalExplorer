@@ -14,25 +14,21 @@ public interface FractalSet {
      *
      * @param real      Real part of complex number to check
      * @param imaginary Imaginary part of complex number to check
-     * @param maxIter   Maximum number of iterations to decide on whether the
-     *                  number is in the set. Numbers for which maxIter is exceeded are
-     *                  considered to be part of the set.
+     * @param maxIter   Maximum number of iterations to decide on whether the number is in the set. Numbers for which
+     *                  maxIter is exceeded are considered to be part of the set.
      * @return True if the number is in the Fractal set.
      */
     boolean isPointInSet(final double real, final double imaginary, final int maxIter);
 
     /**
-     * Check if the complex input number is in the Fractal set. In this case
-     * return the number of iterations used before a decision was taken on whether
-     * the number is in the set.
+     * Check if the complex input number is in the Fractal set. In this case return the number of iterations used before
+     * a decision was taken on whether the number is in the set.
      *
      * @param real      Real part of complex number to check
      * @param imaginary Imaginary part of complex number to check
-     * @param maxIter   Maximum number of iterations to decide on whether the
-     *                  number is in the set. Numbers for which maxIter is exceeded are
-     *                  considered to be part of the set.
-     * @return Number of iterations reached before the Fractal set iterations were
-     * terminated.
+     * @param maxIter   Maximum number of iterations to decide on whether the number is in the set. Numbers for which
+     *                  maxIter is exceeded are considered to be part of the set.
+     * @return Number of iterations reached before the Fractal set iterations were terminated.
      */
     int numberOfIterationsForPoint(final double real, final double imaginary, final int maxIter);
 
@@ -46,8 +42,7 @@ public interface FractalSet {
     /**
      * Provide information on the fractal set parameters as a list of strings.
      *
-     * @return List of strings describing the fractal set parameters (can be
-     * empty).
+     * @return List of strings describing the fractal set parameters (can be empty).
      */
     List<String> getInfoLines();
 
